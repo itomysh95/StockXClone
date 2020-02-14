@@ -3,5 +3,5 @@ import {shallow} from 'enzyme'
 import ItemBanner from '../../components/ItemBanner'
 
 test('should render ItemBanner component',()=>{
-    wrapper = shallow(<ItemBanner />)
+    const wrapper = shallow(<ItemBanner />)
 })

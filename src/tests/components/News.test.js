@@ -1,7 +1,7 @@
 import React from 'react';
 import News from '../../components/News'
-import {Shallow} from 'enzyme'
+import {shallow} from 'enzyme'
 
 test('should render News component',()=>{
-    wrapper = shallow(<News />)
+    const wrapper = shallow(<News />)
 })

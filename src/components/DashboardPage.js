@@ -5,6 +5,7 @@ import FrontPageItems from './FrontPageItems'
 import News from './News'
 import PageEnd from './PageEnd'
 
+// home page
 const DashboardPage=()=>(
     <div>
         <JumbotronBanner />

@@ -3,5 +3,5 @@ import {shallow} from 'enzyme'
 import HelpPage from '../../components/HelpPage'
 
 test('should render News component',()=>{
-    wrapper = shallow(<HelpPage />)
+    const wrapper = shallow(<HelpPage />)
 })
