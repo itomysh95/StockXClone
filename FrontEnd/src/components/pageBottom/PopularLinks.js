@@ -4,7 +4,6 @@ import React from 'react'
 const PopularLinks = ()=>(
     <div className='popular-links'>
         <table>
-            for loop here for table header, table row, table data?
         </table>
     </div>
 )

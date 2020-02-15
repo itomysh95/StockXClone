@@ -8,9 +8,9 @@
     "build:prod": "webpack -p --env production",
     "dev-server": "webpack-dev-server",
     "test": "cross-env NODE_ENV=test jest --watchAll --config=jest.config.json",
-    "start": "node server/server.js",
+    "start-server": "node ./BackEnd/app/app.js",
     "heroku-postbuild": "npm run build:prod",
-    "configure-db": "node bin/configure_db.ps1"
+    "configure-db": "node ./Backend/sql/databaseSetup.js"
   },
   "keywords": [],
   "author": "",
@@ -59,7 +59,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "uuid": "^3.4.0",
-    "validator": "^12.1.0",
+    "validator": "^12.2.0",
     "webpack": "^3.1.0"
   },
   "devDependencies": {

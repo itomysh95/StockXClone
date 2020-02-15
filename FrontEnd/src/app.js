@@ -1,13 +1,19 @@
 // import Express from 'express'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AppRouter, {history} from './routers/AppRouter'
+import AppRouter from './routers/AppRouter'
 import configureStore from './store/configureStore'
 import './styles/styles.scss';
 import 'normalize.css/normalize.css';
 import 'react-dates/lib/css/_datepicker.css'
 import {Provider} from 'react-redux'
 import 'bootstrap/dist/css/bootstrap.min.css';
+// const express = require('express');
+// const app = express();
+// const port = 3000;
+// app.get('/',(req,res)=> res.send('hello world'))
+// app.listen(port,()=> console.log(`example app listneing on port ${port}!`))
+
 
 const store = configureStore();
 

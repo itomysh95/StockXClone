@@ -1,4 +1,5 @@
-const pool = require('../../src/dataBaseStuff/databasePool')
+
+const pool = require('../dataBaseStuff/databasePool')
 
 // CREATE TABLE sneaker(
 //     id              SERIAL PRIMARY KEY,

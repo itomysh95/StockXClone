@@ -1,6 +1,7 @@
-const { createBrand }=require('./brandTable')
-const {createSneaker}=require('./sneakerTable')
-const pool = require('../../src/dataBaseStuff/databasePool')
+const { createBrand }=require('../tables/brandTable')
+const {createSneaker}=require('../tables/sneakerTable')
+const pool = require('../dataBaseStuff/databasePool')
+
 var faker = require('faker');
 faker.seed(123)
 
@@ -14,38 +15,40 @@ const brands = [
     'Reebok'
     ]
 
-// create the brand and sneaker tables
+// drop current table and recreate the brand and sneaker tables
 const tableSetup = async ()=>{
-    let response;
     try{
-        response = await pool.query(
+        await pool.query(
             'DROP TABLE IF EXISTS brand,sneaker CASCADE;'
         )
-        console.log(response)
+        console.log('tables dropped successfuly ')
     }catch(error){
         console.log('error',error)
     }
     try{
-        response = await pool.query(
+        await pool.query(
             `CREATE TABLE IF NOT EXISTS brand(
             id          SERIAL PRIMARY KEY,
-            "brandName" VARCHAR(64) NOT NULL
+            "brandName" VARCHAR(64) NOT NULL,
+            CONSTRAINT name_unique UNIQUE ("brandName")
             );`
         )
+        console.log('Brand table created succesfuly')
     } catch(error){
         return console.log('error',error)
     }
     try{
-        response = await pool.query(`CREATE TABLE IF NOT EXISTS sneaker(
+        await pool.query(`CREATE TABLE IF NOT EXISTS sneaker(
         id              SERIAL PRIMARY KEY,
         "sneakerName"   VARCHAR(64) NOT NULL,
-        "quantity"        INTEGER NOT NULL,
+        "quantity"      INTEGER NOT NULL,
         "amountSold"    INTEGER NOT NULL,
         "sneakerInfo"   TEXT,
         "brandId"       INTEGER, 
-        FOREIGN KEY     ("brandId") REFERENCES brand(id)   
+        FOREIGN KEY     ("brandId") REFERENCES brand(id) ON DELETE CASCADE   
         );`
         ) 
+        console.log('sneaker table created succesfuly')
     } catch(error){
         return console.log('error',error)
     }
@@ -70,7 +73,12 @@ const loadTestBrands = async ()=>{
 const loadTestSneakers= async ()=>{
     var i;
     for(i=0;i<30;i++){
-        let sneakerName = faker.fake("{{commerce.color}} {{name.firstName}} {{random.number(8)}}")
+        let num = faker.random.number(brands.length)
+        let brandN = brands[num]
+        let color = faker.commerce.color()
+        let shoeNum = faker.random.number(12)
+
+        let sneakerName = color+" "+brandN+" "+shoeNum
         let quantity = faker.random.number(100)
         let amountSold = faker.random.number(20)
         let sneakerInfo = faker.lorem.sentence(9)

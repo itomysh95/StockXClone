@@ -3,7 +3,7 @@ import JumbotronBanner from './JumbotronBanner'
 import ItemBanner from './ItemBanner'
 import FrontPageItems from './FrontPageItems'
 import News from './News'
-import PageEnd from './PageEnd'
+import PageEnd from './pageBottom/PageEnd'
 
 // home page
 const DashboardPage=()=>(
