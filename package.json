@@ -8,9 +8,9 @@
     "build:prod": "webpack -p --env production",
     "dev-server": "webpack-dev-server",
     "test": "cross-env NODE_ENV=test jest --watchAll --config=jest.config.json",
-    "start-server": "node ./BackEnd/app/app.js",
+    "start-server": "node ./back-end/app/app.js",
     "heroku-postbuild": "npm run build:prod",
-    "configure-db": "node ./Backend/dataBaseStuff/databaseSetup.js"
+    "configure-db": "node ./back-end/database-stuff/database-setup.js"
   },
   "keywords": [],
   "author": "",
