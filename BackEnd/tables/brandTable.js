@@ -12,8 +12,17 @@ const getBrand= async (name)=>{
     //     filter = '*'
     // }
     try{
-        const data = await pool.query(`SELECT * FROM brand WHERE LOWER("brandName")=$1`,
-        [name])
+        const data = await pool.query(
+            `SELECT * FROM brand
+             WHERE LOWER("brandName")=$1`,
+            [name.toLowerCase()]
+        )
+
+        // if brand doens't exist
+        if(data.rows.length===0){
+            throw {detail:"brand does not exist"}
+        }
+        
         return {data:data.rows}
     }catch(error){
         return{error}
@@ -23,7 +32,9 @@ const getBrand= async (name)=>{
 // return all brands TODO: able to use getBrand() for this case too?
 const getAllBrands = async()=>{
     try{
-        const data = await pool.query(`SELECT * FROM brand`)
+        const data = await pool.query(
+            `SELECT * FROM brand`
+        )
         return {data:data.rows}
     }
     catch(error){
@@ -34,8 +45,12 @@ const getAllBrands = async()=>{
 // create a new brand in the database if it does not exist
 const createBrand= async (brand)=>{
     try{
-        const data = await pool.query('INSERT INTO brand("brandName") VALUES($1) RETURNING *',
-        [brand.name])
+        const data = await pool.query(
+            `INSERT INTO brand("brandName") 
+            VALUES($1) 
+            RETURNING *`,
+            [brand.name]
+        )
         // return the newly added row data
         return {data:data.rows}
     }catch(error){
@@ -46,8 +61,19 @@ const createBrand= async (brand)=>{
 // remove a brand in the database 'TODO: move it to a staging delete table instead'
 const removeBrand = async(name)=>{
     try{
-        const data = await pool.query('DELETE FROM brand WHERE LOWER("brandName")=$1 RETURNING *',
-        [name])
+        // case sensitivity check
+        const data = await pool.query(
+            `DELETE FROM brand 
+            WHERE LOWER("brandName")=$1 
+            RETURNING *`,
+            [name.toLowerCase()]
+        )
+
+        // if brand doens't exist
+        if(data.rows.length===0){
+            throw {detail:"brand does not exist"}
+        }
+
         return{data:data.rows}
     }catch(error){
         return{error}

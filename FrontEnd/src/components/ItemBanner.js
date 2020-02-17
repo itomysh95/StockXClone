@@ -9,10 +9,11 @@ const ItemBanner = ()=>(
     </div>
 )
 
-const mapStateToProps=(state)=>{
-    return{
+// const mapStateToProps=(state)=>{
+//     return{
 
-    }
-}
+//     }
+// }
 
-export default connect(mapStateToProps)(ItemBanner)
+// export default connect(mapStateToProps)(ItemBanner)
+export default ItemBanner

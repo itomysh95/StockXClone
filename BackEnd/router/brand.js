@@ -4,9 +4,6 @@ const router = new express.Router()
 
 router.use(express.json())
 
-router.get('/',async(req,res)=>{
-    console.log("test")
-})
 
 // get all the brand names
 router.get('/brands', async(req,res)=>{
@@ -26,9 +23,9 @@ router.get('/brands', async(req,res)=>{
 // get a brand by name
 router.get('/brand/:name', async(req,res)=>{
     try{
-        // to make sure it's case insensitive 
-        const name = req.params.name.toLowerCase()
+        const name = req.params.name
         const result = await getBrand(name)
+
         if(result.error){
             throw {error:result.error.detail}
         }
@@ -61,34 +58,35 @@ router.post('/brand',async(req,res)=>{
 
 // delete a brand by name
 router.delete('/brand/:name', async(req,res)=>{
-    const name = req.params.name.toLowerCase()
+    const name = req.params.name
     try{
         const result = await removeBrand(name)
         // if there was an error deleting from database
         if(result.error){
             throw {error:result.error.detail}
         }
+        res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
     }
 })
 
-// update a brand by name
-router.delete('/brand', async(req,res)=>{
-    const brand = req.body;
-    try{
-        const result = await updateBrand({
-            ...brand
-        })
+// update a brand by name TODO at later time, not sure if needed right now
+// router.delete('/brand', async(req,res)=>{
+//     const brand = req.body;
+//     try{
+//         const result = await updateBrand({
+//             ...brand
+//         })
 
-        // if there was an error updating database
-        if(result.error){
-            throw{error:result.error.detail}
-        }
-    }catch(error){
-        res.status(400).send(error)
-    }
-})
+//         // if there was an error updating database
+//         if(result.error){
+//             throw{error:result.error.detail}
+//         }
+//     }catch(error){
+//         res.status(400).send(error)
+//     }
+// })
 
 
 

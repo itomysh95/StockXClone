@@ -4,3 +4,5 @@ const LowestAsk = ()=>(
     <div>
     </div>
 )
+
+export default LowestAsk
