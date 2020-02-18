@@ -7,6 +7,6 @@ const toTitleCase = (phrase) => {
       .join(' ');
   };
 
-module.exports = {
+export {
     toTitleCase
 }

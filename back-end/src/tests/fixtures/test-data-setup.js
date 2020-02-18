@@ -1,7 +1,7 @@
-const pool = require('../../database-stuff/database-pool')
-const {dropTable} =require('../../database-stuff/database-queries')
-const {createBrand}=require('../../tables/brand-table')
-const {createSneaker} = require('../../tables/sneaker-table')
+import {pool} from'../../database-stuff/database-pool'
+import {dropTable} from'../../database-stuff/database-queries'
+import {createBrand}from'../../tables/brand-table'
+import  {createSneaker} from'../../tables/sneaker-table'
 
 // test tables
 const testTables = [
@@ -122,7 +122,7 @@ const dropTestTable = async()=>{
     }
 }
 
-module.exports={
+export {
     setupTestTable,
     brands,
     shoes,

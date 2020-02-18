@@ -1,9 +1,12 @@
-const pool = require('../database-stuff/database-pool')
-
+import {pool} from '../database-stuff/database-pool'
+import {buildValues} from '../database-stuff/database-queries'
 // CREATE TABLE brand(
 //     id          SERIAL PRIMARY KEY,
 //     "brandName" VARCHAR(64) NOT NULL
 // );
+
+
+const brandParams = `\"brandName\"`
 
 
 // get a brand from database TODO: make more abstract
@@ -62,7 +65,7 @@ const createBrand= async (brand)=>{
 const removeBrand = async(name)=>{
     try{
         // case sensitivity check
-        const data = await pool.query(
+        const brand = await pool.query(
             `DELETE FROM brand 
             WHERE LOWER("brandName")=$1 
             RETURNING *`,
@@ -70,17 +73,17 @@ const removeBrand = async(name)=>{
         )
 
         // if brand doens't exist
-        if(data.rows.length===0){
+        if(brand.rows.length===0){
             throw {detail:"brand does not exist"}
         }
 
-        return{data:data.rows}
+        return{brand:brand.rows}
     }catch(error){
         return{error}
     }
 }
 
-// update information on brand 
+// TODO update information on brand 
 const updateBrand = async(brand)=>{
     // to fill out when other brand info comes in, most popular?
 }
@@ -90,7 +93,8 @@ const removePerm = async(brand)=>{
 
 }
 
-module.exports={
+
+export {
     createBrand,
     getBrand,
     removeBrand,

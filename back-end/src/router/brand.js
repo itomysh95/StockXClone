@@ -9,11 +9,6 @@ router.use(express.json())
 router.get('/brands', async(req,res)=>{
     try{
         const result = await getAllBrands()
-
-        if(result.error){
-            throw{error:result.error.detail}
-        }
-
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -25,11 +20,6 @@ router.get('/brand/:name', async(req,res)=>{
     try{
         const name = req.params.name
         const result = await getBrand(name)
-
-        if(result.error){
-            throw {error:result.error.detail}
-        }
-
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -43,13 +33,6 @@ router.post('/brand',async(req,res)=>{
         const result = await createBrand({
             ...brand
         })
-
-        // if there was an error writing to database
-        if (result.error){
-            throw {error:result.error.detail}
-        }
-
-        // else return the object that was added
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -61,10 +44,6 @@ router.delete('/brand/:name', async(req,res)=>{
     const name = req.params.name
     try{
         const result = await removeBrand(name)
-        // if there was an error deleting from database
-        if(result.error){
-            throw {error:result.error.detail}
-        }
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -89,5 +68,4 @@ router.delete('/brand/:name', async(req,res)=>{
 // })
 
 
-
-module.exports=router
+export{router as brandRouter}

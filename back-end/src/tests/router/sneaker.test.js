@@ -1,12 +1,12 @@
-const {getSneaker,
+import {getSneaker,
     createSneaker,
     getSneakers,
     updateSneakerInfo,
     deleteSneaker,
-    getId} = require('../../tables/sneaker-table')
-const {setupTestTable,dropTestTable} = require('../fixtures/test-data-setup')
-const app = require('../../app/app')
-const request = require('supertest')
+    getId} from '../../tables/sneaker-table'
+import {setupTestTable,dropTestTable} from '../fixtures/test-data-setup'
+import app from '../../app/app'
+import request from 'supertest'
 
 // set up test database
 beforeAll(async()=>{

@@ -1,9 +1,10 @@
-const { createBrand }=require('../tables/brand-table')
-const {createSneaker}=require('../tables/sneaker-table')
-const pool = require('./database-pool')
-const {dropTable} = require('./database-queries')
+import { createBrand } from '../tables/brand-table'
+import {createSneaker} from '../tables/sneaker-table'
+import {pool} from './database-pool'
+import {dropTable} from './database-queries'
 
-var faker = require('faker');
+var faker = require('faker')
+
 faker.seed(123)
 
 // sample brands
@@ -19,16 +20,13 @@ const brands = [
 const tables=[
     'brand',
     'sneaker',
-    'user'
+    'account'
 ]
 
 // drop current table and recreate the brand and sneaker tables
 const tableSetup = async ()=>{
     try{
-        result = await dropTable(tables);
-        if(result.error){
-            throw {error:result.error}
-        }
+        await dropTable(tables);
     }catch(error){
         // return console.log(error)
         return console.log('error: ',error)
@@ -62,14 +60,16 @@ const tableSetup = async ()=>{
     }
     try{
         await pool.query(
-            `CREATE TABLE ${tables[2]}(
+            `CREATE TABLE IF NOT EXISTS ${tables[2]}(
             id                  SERIAL PRIMARY KEY,
-            "username"          VARCHAR(64) UNIQUE NOT NULL,
+            "accountName"       VARCHAR(64) UNIQUE NOT NULL,
             "password"          VARCHAR(64) NOT NULL,
-            "sneakersSold"      INT,
-            "sneakersBought"    INT,
+            "email"             VARCHAR(255) UNIQUE NOT NULL,
+            "sneakersSold"      INTEGER,
+            "sneakersBought"    INTEGER
             );`
         )
+        console.log(`${tables[2]} table created succesfuly`)
     }catch(error){
         return console.log('error :',error)
     }
@@ -104,7 +104,7 @@ const loadTestSneakers= async ()=>{
         let quantity = faker.random.number(100)
         let amountSold = faker.random.number(20)
         let sneakerInfo = faker.lorem.sentence(9)
-        sneaker = {
+        const sneaker = {
             sneakerName,
             quantity,
             amountSold,
@@ -115,23 +115,30 @@ const loadTestSneakers= async ()=>{
     }
 }
 
-// to load some user data to database 
-const loadTestUsers = async()=>{
-    try{
-        await pool.query(
-            `
-            `
-        )
-    }catch(error){
-        console.log(error)
-    }
-}
+
+// TODO do we need this?
+// // to load some user data to database 
+// const loadTestUsers = async()=>{
+//     try{
+//         await pool.query(
+//             `INSERT INTO user(
+//                 "",
+//                 "password",
+//                 "sneakerSold",
+//                 "sneakrsBought")
+//             VALUES($1,$2,$3,$4)
+//             `,userData
+//         )
+//     }catch(error){
+//         console.log(error)
+//     }
+// }
 
 const start = async()=>{
     await tableSetup()
     await loadTestBrands()
     await loadTestSneakers()
-    await loadTestUsers()
+    // await loadTestUsers()
     // close the connection?
     await pool.end()
 }
