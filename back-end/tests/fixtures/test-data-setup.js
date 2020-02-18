@@ -1,7 +1,7 @@
-const pool = require('../../dataBaseStuff/databasePool')
-const {dropTable} =require('../../dataBaseStuff/databaseQueries')
-const {createBrand}=require('../../tables/brandTable')
-const {createSneaker} = require('../../tables/sneakerTable')
+const pool = require('../../database-stuff/database-pool')
+const {dropTable} =require('../../database-stuff/database-queries')
+const {createBrand}=require('../../tables/brand-table')
+const {createSneaker} = require('../../tables/sneaker-table')
 
 // test tables
 const testTables = [
@@ -78,6 +78,7 @@ const setupTestTable = async ()=>{
                 VALUES($1)`,
                 [brands[i]]
             )
+            
         }
     }catch(error){
         return console.log('error',error)

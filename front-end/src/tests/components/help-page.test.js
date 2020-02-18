@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme'
-import HelpPage from '../../components/HelpPage'
+import HelpPage from '../../components/help-page'
 
 test('should render News component',()=>{
     const wrapper = shallow(<HelpPage />)

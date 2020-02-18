@@ -1,9 +1,9 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch, Link, NavLink} from 'react-router-dom'
-import DashboardPage from '../components/DashboardPage';
-import HelpPage from '../components/HelpPage';
-import NotFoundPage from '../components/NotFoundPage';
-import Header from '../components/Header'
+import DashboardPage from '../components/dashboard-page';
+import HelpPage from '../components/help-page';
+import NotFoundPage from '../components/not-found-page';
+import Header from '../components/header'
 
 const AppRouter = ()=>(
     <BrowserRouter>

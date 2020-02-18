@@ -1,5 +1,5 @@
 import React from 'react';
-import NotFoundPage from '../../components/NotFoundPage';
+import NotFoundPage from '../../components/not-found-page';
 import {shallow} from 'enzyme'
 
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AppRouter from './routers/app-router'
-import configureStore from './store/configureStore'
+import configureStore from './store/configure-store'
 import './styles/styles.scss';
 import 'normalize.css/normalize.css';
 import 'react-dates/lib/css/_datepicker.css'

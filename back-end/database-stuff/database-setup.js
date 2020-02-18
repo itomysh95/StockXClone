@@ -117,7 +117,14 @@ const loadTestSneakers= async ()=>{
 
 // to load some user data to database 
 const loadTestUsers = async()=>{
-    
+    try{
+        await pool.query(
+            `
+            `
+        )
+    }catch(error){
+        console.log(error)
+    }
 }
 
 const start = async()=>{
