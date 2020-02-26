@@ -2,5 +2,9 @@ node_modules
 public/dist/
 .env.test
 .env.development
+<<<<<<< HEAD
 config/
+=======
+databaseInfo/
+>>>>>>> 2411ca756a1a655b2b54cd94da58e147b6afe002
 todo

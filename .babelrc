@@ -14,4 +14,8 @@
     "@babel/plugin-transform-react-constant-elements",
     "@babel/plugin-transform-react-inline-elements"
   ]
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 2411ca756a1a655b2b54cd94da58e147b6afe002

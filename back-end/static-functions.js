@@ -7,6 +7,10 @@ const toTitleCase = (phrase) => {
       .join(' ');
   };
 
+<<<<<<< HEAD
 export {
+=======
+module.exports = {
+>>>>>>> 2411ca756a1a655b2b54cd94da58e147b6afe002
     toTitleCase
 }
