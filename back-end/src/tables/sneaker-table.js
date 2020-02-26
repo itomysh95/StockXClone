@@ -84,10 +84,10 @@ const updateSneakerInfo=async(sneakerName,sneakerUpdates)=>{
 // TODO currently it requires user to enter all fields for creating a new sneaker,
 // but database does not require all fields, find a way to implement 
 // create a new sneaker in the database
-const createSneaker = async (sneaker)=>{
+const createSneaker = async (sneakerInfo)=>{
     try{
     // make sure any case sensitivity are fixed
-        const sneakerInput = {...sneaker, brandName:sneaker.brandName.toLowerCase().replace(/^\w/, c => c.toUpperCase())}
+        const sneakerInput = {...sneakerInfo, brandName:sneakerInfo.brandName.toLowerCase().replace(/^\w/, c => c.toUpperCase())}
         const sneaker = await pool.query(
             `INSERT INTO sneaker(${sneakerParams}) 
             VALUES($1,$2,$3,$4,$5) 
@@ -111,7 +111,7 @@ const deleteSneaker = async(sneakerName)=>{
         [sneakerName.toLowerCase()])
         // if sneaker doens't exist
         if(sneaker.rows.length===0){
-            throw {detail:"sneaker does not exist"}
+            throw {error:"sneaker does not exist"}
         }
         return {sneaker: sneaker.rows}
     }catch(error){

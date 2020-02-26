@@ -23,7 +23,7 @@ const getBrand= async (name)=>{
 
         // if brand doens't exist
         if(data.rows.length===0){
-            throw {detail:"brand does not exist"}
+            throw {error:"brand does not exist"}
         }
         
         return {data:data.rows}
@@ -74,7 +74,7 @@ const removeBrand = async(name)=>{
 
         // if brand doens't exist
         if(brand.rows.length===0){
-            throw {detail:"brand does not exist"}
+            throw {error:"brand does not exist"}
         }
 
         return{brand:brand.rows}

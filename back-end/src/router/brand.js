@@ -9,6 +9,9 @@ router.use(express.json())
 router.get('/brands', async(req,res)=>{
     try{
         const result = await getAllBrands()
+        if(result.error){
+            throw result.error
+        }
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -20,6 +23,9 @@ router.get('/brand/:name', async(req,res)=>{
     try{
         const name = req.params.name
         const result = await getBrand(name)
+        if(result.error){
+            throw result.error
+        }
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -33,6 +39,9 @@ router.post('/brand',async(req,res)=>{
         const result = await createBrand({
             ...brand
         })
+        if(result.error){
+            throw result.error
+        }
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -44,6 +53,9 @@ router.delete('/brand/:name', async(req,res)=>{
     const name = req.params.name
     try{
         const result = await removeBrand(name)
+        if(result.error){
+            throw result.error
+        }
         res.status(201).send(result)
     }catch(error){
         res.status(400).send(error)

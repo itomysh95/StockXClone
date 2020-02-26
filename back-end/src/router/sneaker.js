@@ -13,7 +13,7 @@ router.post('/sneaker', async (req,res)=>{
         })
 
         if(result.error){
-            throw {error:result.error.detail}
+            throw result.error
         }
 
         res.status(201).send(result)
@@ -26,6 +26,10 @@ router.post('/sneaker', async (req,res)=>{
 router.get('/sneakers/:brand', async (req,res)=>{
     try{
         const result = await getSneakers(req.params.brand)
+        if(result.error){
+            throw result.error
+        }
+
         res.status(200).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -36,6 +40,10 @@ router.get('/sneakers/:brand', async (req,res)=>{
 router.get('/sneaker/:name', async (req,res)=>{
     try{
         const result = await getSneaker(req.params.name)
+        if(result.error){
+            throw result.error
+        }
+
         res.status(200).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -46,6 +54,10 @@ router.get('/sneaker/:name', async (req,res)=>{
 router.patch('/sneaker/:name', async (req,res)=>{
     try{
         const result = await updateSneakerInfo(req.params.name.toLowerCase(),req.body)
+        if(result.error){
+            throw result.error
+        }
+
         res.status(200).send(result)
     }catch(error){
         res.status(400).send(error)
@@ -58,7 +70,7 @@ router.delete('/sneaker/:name', async(req,res)=>{
     try{
         const result = await deleteSneaker(req.params.name)
         if(result.error){
-            throw {error:result.error.detail}
+            throw result.error
         }
         res.status(200).send(result)
     }catch(error){
