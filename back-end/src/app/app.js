@@ -26,7 +26,10 @@ const app = express()
 const port = process.env.PORT || 3000
 
 
-
+app.use(function(req,res,next){
+    res.header("Access-Control-Allow-Origin","*")
+    res.header("Accesss-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept")
+})
 
 app.use(brandRouter)
 app.use(sneakerRouter)

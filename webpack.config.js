@@ -18,11 +18,7 @@ module.exports = (env)=>{
     const isProduction = env ==='production';
     
     return {
-<<<<<<< HEAD
         entry: './front-end/src/app.js',
-=======
-        entry: './FrontEnd/src/app.js',
->>>>>>> 2411ca756a1a655b2b54cd94da58e147b6afe002
         output:{
             path:path.join(__dirname,'public','dist'),
             filename: 'bundle.js'
