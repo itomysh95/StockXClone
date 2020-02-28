@@ -1,8 +1,8 @@
 import React from 'react'
-import PopularBrands from './popular-brands'
-import MostPopular from './most-popular'
-import NewLowestAsk from './new-lowest-ask'
-import NewHighestBids from './new-highest-bids'
+import PopularBrands from './popular-display/popular-brands'
+import MostPopular from './popular-display/most-popular'
+import NewLowestAsk from './popular-display/new-lowest-ask'
+import NewHighestBids from './popular-display/new-highest-bids'
 // component for displaying the items on front page
 
 const FrontPageItems = ()=>(

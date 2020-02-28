@@ -35,7 +35,7 @@ const getSneaker = async (sneakerName,filter={})=>{
             throw {error:"sneaker does not exist"}
         }
         // else return the sneaker info
-        return {sneaker:sneaker.rows}
+        return {sneaker:sneaker.rows[0]}
     }catch(error){
         return {error}
     }

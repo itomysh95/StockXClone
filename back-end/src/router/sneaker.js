@@ -6,7 +6,7 @@ router.use(express.json())
 
     
 // create a new sneaker and add to database
-router.post('/sneaker', async (req,res)=>{
+router.post('/sneaker/create', async (req,res)=>{
     try{
         const result = await createSneaker({
             ...req.body
@@ -23,7 +23,7 @@ router.post('/sneaker', async (req,res)=>{
 })
 
 // get all the sneakers of a brand
-router.get('/sneakers/:brand', async (req,res)=>{
+router.get('/sneaker/retrieve/brand/:brand', async (req,res)=>{
     try{
         const result = await getSneakers(req.params.brand)
         if(result.error){
@@ -37,7 +37,7 @@ router.get('/sneakers/:brand', async (req,res)=>{
 })
 
 // get a sneaker by name
-router.get('/sneaker/:name', async (req,res)=>{
+router.get('/sneaker/retrieve/name/:name', async (req,res)=>{
     try{
         const result = await getSneaker(req.params.name)
         if(result.error){
@@ -51,7 +51,7 @@ router.get('/sneaker/:name', async (req,res)=>{
 })
 
 // given key value pairs, update the sneaker's info
-router.patch('/sneaker/:name', async (req,res)=>{
+router.patch('/sneaker/update/name/:name', async (req,res)=>{
     try{
         const result = await updateSneakerInfo(req.params.name.toLowerCase(),req.body)
         if(result.error){
@@ -66,7 +66,7 @@ router.patch('/sneaker/:name', async (req,res)=>{
 
 
 // delete a sneaker from the database
-router.delete('/sneaker/:name', async(req,res)=>{
+router.delete('/sneaker/delete/name/:name', async(req,res)=>{
     try{
         const result = await deleteSneaker(req.params.name)
         if(result.error){

@@ -17,6 +17,7 @@
 
 
 import express from 'express'
+import cors from 'cors'
 import {brandRouter} from '../router/brand'
 import {sneakerRouter} from '../router/sneaker'
 import {accountRouter} from '../router/account'
@@ -26,10 +27,7 @@ const app = express()
 const port = process.env.PORT || 3000
 
 
-app.use(function(req,res,next){
-    res.header("Access-Control-Allow-Origin","*")
-    res.header("Accesss-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept")
-})
+app.use(cors({origin:'http://localhost:8080'}))
 
 app.use(brandRouter)
 app.use(sneakerRouter)
