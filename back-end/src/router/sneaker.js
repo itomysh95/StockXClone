@@ -1,5 +1,10 @@
 import express from 'express'
-import {createSneaker, getSneaker,getSneakers, updateSneakerInfo, deleteSneaker} from '../tables/sneaker-table'
+import {createSneaker, 
+    getSneaker,
+    getSneakers, 
+    updateSneakerInfo, 
+    deleteSneaker,
+    getPopular} from '../tables/sneaker-table'
 const router = new express.Router()
 router.use(express.json())
 // Router file to handle sneaker API calls
@@ -11,7 +16,6 @@ router.post('/sneaker/create', async (req,res)=>{
         const result = await createSneaker({
             ...req.body
         })
-
         if(result.error){
             throw result.error
         }
@@ -77,6 +81,19 @@ router.delete('/sneaker/delete/name/:name', async(req,res)=>{
         res.status(400).send(error)
     }
 
+})
+
+// get the most popular sneakers
+router.get('/sneaker/retrieve/popular/:amount',async(req,res)=>{
+    try{
+        const sneakerList = await getPopular(req.params.amount)
+        if(sneakerList.error){
+            throw sneakerList.error
+        }
+        res.status(200).send(sneakerList)
+    }catch(error){
+        res.status(400).send(error)
+    }
 })
 
 export{router as sneakerRouter}

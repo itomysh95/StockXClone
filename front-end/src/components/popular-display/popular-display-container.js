@@ -1,14 +1,16 @@
 import React from 'react'
-import mostPopular from './most-popular'
-import newLowestAsk from './new-lowest-ask'
-import newHighestBids from './new-highest-bids'
+import MostPopular from './most-popular'
+import NewLowestAsk from './new-lowest-ask'
+import NewHighestBids from './new-highest-bids'
+import PopularBrands from './popular-brands'
 
-const popularDisplay = ()=>{
+const PopularDisplay = ()=>{
     <div>
-        <mostPopular />
-        <newLowestAsk />
-        <newHighestBids />
+        <PopularBrands />
+        <MostPopular />
+        <NewLowestAsk />
+        <NewHighestBids />
     </div>
 }
 
-export default popularDisplay
+export default PopularDisplay

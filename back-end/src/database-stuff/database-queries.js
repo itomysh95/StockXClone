@@ -10,7 +10,7 @@ const dropTable=async(tables)=>{
     try{
         tables = tables.toString()
         await pool.query(
-            `DROP TABLE IF EXISTS ${tables} CASCADE;`
+            `DROP TABLE IF EXISTS ${tables} CASCADE;`   
         )
         return{msg:`${tables} were dropped`}
     }catch(error){
@@ -70,4 +70,8 @@ const updateQueryBuilder = (update)=>{
     }
 }
 
-export {dropTable, buildValues, updateQueryBuilder}
+
+
+export {dropTable, 
+    buildValues, 
+    updateQueryBuilder}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component} from 'react'
 import {connect} from 'react-redux'
-
+import PopularItem from './popular-item'
 // CREATE TABLE sneaker(
 //     id              SERIAL PRIMARY KEY,
 //     "sneakerName"   VARCHAR(64) NOT NULL,
@@ -30,6 +30,13 @@ const MostPopular = () => {
     },[])
     return(                    
         <div>
+            <h3>Most Popular</h3>
+            <table>
+                <tr>
+                    
+                    <td><PopularItem /></td>
+                </tr>
+            </table>
             <h3>Sneaker: {sneakerData.sneakerName}</h3>
             <h3>Brand: {sneakerData.brandName}</h3>
         </div>
