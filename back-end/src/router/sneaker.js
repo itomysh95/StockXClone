@@ -1,7 +1,6 @@
 import express from 'express'
 import {createSneaker, 
     getSneaker,
-    getSneakers, 
     updateSneakerInfo, 
     deleteSneaker,
     getPopular} from '../tables/sneaker-table'
@@ -26,19 +25,6 @@ router.post('/sneaker/create', async (req,res)=>{
     }
 })
 
-// get all the sneakers of a brand
-router.get('/sneaker/retrieve/brand/:brand', async (req,res)=>{
-    try{
-        const result = await getSneakers(req.params.brand)
-        if(result.error){
-            throw result.error
-        }
-
-        res.status(200).send(result)
-    }catch(error){
-        res.status(400).send(error)
-    }
-})
 
 // get a sneaker by name
 router.get('/sneaker/retrieve/name/:name', async (req,res)=>{

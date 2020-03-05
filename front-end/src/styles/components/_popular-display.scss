@@ -1,0 +1,50 @@
+// popular items
+.popular-item{
+    border-color: brown;
+    background: #faf8f2;
+    margin: 0 auto;
+    width: 90%;
+}
+
+.popular-item-name{
+    color: #000000; 
+    text-shadow: 3px 2px 3px rgba(255,255,255,.2);
+    font-size: large;
+}
+
+.popular-item-quantity{
+    color: #000000;
+    font-size: larger;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.popular-item-amount-sold{
+    color:#000000;
+}
+
+.popular-item-current-ask{
+    color:rgb(83, 138, 0);
+}
+
+.popular-item-current-bid{
+    color: red;
+}
+
+.popular-container{
+    display:inline-flexbox;
+    justify-content: center;
+}
+
+.popular-table{
+    margin: 0 auto;
+    table-layout: fixed;
+    width: 1000px;
+    border-spacing: 10px;
+}
+
+.popular-td{
+    border:2px solid #c4c4c4;
+    padding:50px;
+    margin:15px;
+}
+

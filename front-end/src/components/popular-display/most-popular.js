@@ -1,44 +1,56 @@
 import React, { useState, useEffect, Component} from 'react'
 import {connect} from 'react-redux'
 import PopularItem from './popular-item'
-// CREATE TABLE sneaker(
-//     id              SERIAL PRIMARY KEY,
-//     "sneakerName"   VARCHAR(64) NOT NULL,
-//     quantity        INTEGER NOT NULL,
-//     "amountSold"    INTEGER NOT NULL,
-//     "sneakerinfo"   TEXT,
-//     "brandName"     INTEGER, 
-//     FOREIGN KEY     ("brandName") REFERENCES brand("brandName")   
-// );
+import {serverURL} from '../../../config/config'
 
 // functional component approach
 const MostPopular = () => {
-    const [sneakerData, setData] = useState([])
+    const [sneakerData, setSneakerData] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    // const [errorState, setErrorState] = useState(false)
     useEffect(()=>{
-        async function fetchSneaker(){
+        const fetchSneaker = async()=>{
             try{
+                setIsLoading(true)
                 // read in the data
-                const res = await fetch('http://localhost:3000/sneaker/retrieve/name/Green Turbo Jordan 15  ')
-                const sneaker = await res.json()
-                // set the state of sneakerData to the sneaker json object propeprties
-                setData(sneaker.sneaker)
+                const topFiveSneakers = await fetch(`${serverURL}/sneaker/retrieve/popular/5`)
+                const sneaker = await topFiveSneakers.json()
+                setSneakerData({sneakers:sneaker.list})
+                // setIsLoading(false)
             }catch(error){
-                console.log(error)
+                // setErrorState(true)
             }
         }
         fetchSneaker()
     },[])
+//     <table>
+//     <tr>
+//         <td><PopularItem /></td>
+//     </tr>
+// </table>
     return(                    
-        <div>
-            <h3>Most Popular</h3>
-            <table>
-                <tr>
-                    
-                    <td><PopularItem /></td>
-                </tr>
-            </table>
-            <h3>Sneaker: {sneakerData.sneakerName}</h3>
-            <h3>Brand: {sneakerData.brandName}</h3>
+        <div className='container'>
+            <h3 align='center'>Most Popular</h3>
+                {
+                    isLoading ? <p>loading</p>:
+                    <div>
+                        <table className='popular-table'>
+                            <tbody>
+                                <tr>
+                                    {
+                                        sneakerData.sneakers.map((sneaker)=>{
+                                            return(
+                                                <td className='popular-td'>
+                                                    <PopularItem {...sneaker} />
+                                                </td>
+                                            )
+                                        })
+                                    }
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                }
         </div>
     )
 }

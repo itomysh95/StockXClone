@@ -1,20 +1,23 @@
-import {buildValues,
-    updateQueryBuilder} from '../database-stuff/database-queries'
+import {
+    buildValues,
+    updateQueryBuilder,
+    toTitleCase
+} from '../database-stuff/database-queries'
 import {pool} from '../database-stuff/database-pool'
 
+// remove brand table, create inventory-table
+// 
+
 // CREATE TABLE sneaker(
-//     id              SERIAL PRIMARY KEY,
-//     "sneakerName"   VARCHAR(64) NOT NULL,
-//     quantity        INTEGER NOT NULL,
-//     "amountSold"    INTEGER NOT NULL,
-//     "sneakerinfo"   TEXT,
-//     "brandName"     INTEGER, 
-//     FOREIGN KEY     ("brandName") REFERENCES brand("brandName")   
+    // id              SERIAL PRIMARY KEY,
+    // "sneakerName"   VARCHAR(64) UNIQUE NOT NULL,
+    // "amountSold"    INTEGER NOT NULL,
+    // "sneakerInfo"   TEXT,
+    // "brandName"     VARCHAR(64) NOT NULL 
 // );
 
 const sneakerParams = [
     `\"sneakerName\"`,
-    `\"quantity\"`,
     `\"amountSold\"`,
     `\"sneakerInfo\"`,
     `\"brandName\"`
@@ -43,12 +46,13 @@ const getSneaker = async (sneakerName,filter={})=>{
     }
 }
 
+
 // get all the sneakers of a brand
 const getSneakers = async(brand)=>{
     try{       
         const data = await pool.query(
             `SELECT * FROM sneaker 
-            WHERE LOWER("brandName")=$1`,
+            WHERE LOWER(${sneakerParams[3]})=$1`,
             [brand.toLowerCase()]
         )
         // return the sneakers found for this brand
@@ -67,7 +71,7 @@ const updateSneakerInfo=async(sneakerName,sneakerUpdates)=>{
                     SET ${updates} 
                     WHERE LOWER(${sneakerParams[0]})=$1
                     RETURNING *`,
-                    [sneakerName])
+                    [sneakerName.toLowerCase()])
         // if the sneaker does not exist
         if(sneaker.rows.length===0){
             throw {error:'sneaker does not exist'}
@@ -86,10 +90,13 @@ const createSneaker = async (sneaker)=>{
         let keyValue = {...sneaker, 
             brandName:sneaker.brandName
             .toLowerCase()
-            .replace(/^\w/, c => c.toUpperCase())}
+            .replace(/^\w/, c => c.toUpperCase()),
+            sneakerName:toTitleCase(sneaker.sneakerName)
+        }
         // wrap the column names by quotes
         const columns = Object.keys(keyValue).map((columnName)=>`\"${columnName}\"`)
         const values = buildValues(Object.values(keyValue))
+        // create new sneaker in database
         const data = await pool.query(
             `INSERT INTO sneaker(${columns}) 
             VALUES(${values}) 
@@ -140,14 +147,15 @@ const getPopular = async(amount)=>{
     try{
         const sneakerList = await pool.query(
             `SELECT * FROM sneaker
-            ORDER BY ${sneakerParams[2]} desc
-            limit ${amount}`
+            ORDER BY ${sneakerParams[1]} DESC
+            LIMIT ${amount}`
         )
         return {list:sneakerList.rows}
     }catch(error){
         console.log(error)
     }
 }
+
 
 export{
     getSneaker,

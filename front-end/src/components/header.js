@@ -16,7 +16,7 @@ const Header= ()=>(
                 <NavLink to='/help' exact={true} activeClassName="is-active" >About</NavLink>
                 <NavLink to='/help' exact={true} activeClassName="is-active" >Help</NavLink>
                 <NavLink to='/help' exact={true} activeClassName="is-active" >Login</NavLink>
-                <NavLink to='/help' exact={true} activeClassName="is-active" >Sign Up</NavLink>
+                <NavLink to='/signup' exact={true} activeClassName="is-active" >Sign Up</NavLink>
                 <NavLink to='/help' exact={true} activeClassName="is-active" >Sell</NavLink>
         </div>
     </div>

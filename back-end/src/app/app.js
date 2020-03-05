@@ -18,20 +18,20 @@
 
 import express from 'express'
 import cors from 'cors'
-import {brandRouter} from '../router/brand'
 import {sneakerRouter} from '../router/sneaker'
 import {accountRouter} from '../router/account'
-
+import {inventoryRouter} from '../router/inventory'
 
 const app = express()
 const port = process.env.PORT || 3000
 
 
+// makes sure that we take in input from localhost 8080
 app.use(cors({origin:'http://localhost:8080'}))
 
-app.use(brandRouter)
 app.use(sneakerRouter)
 app.use(accountRouter)
+app.use(inventoryRouter)
 app.use(express.json())
 
 app.listen(port,()=>{

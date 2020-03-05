@@ -4,13 +4,13 @@ import NewLowestAsk from './new-lowest-ask'
 import NewHighestBids from './new-highest-bids'
 import PopularBrands from './popular-brands'
 
-const PopularDisplay = ()=>{
-    <div>
+const PopularDisplay = ()=>(
+    <div className='popular-container'>
         <PopularBrands />
         <MostPopular />
         <NewLowestAsk />
         <NewHighestBids />
     </div>
-}
+)
 
 export default PopularDisplay
