@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component} from 'react'
 import {connect} from 'react-redux'
 import PopularItem from './popular-item'
 import {serverURL} from '../../../config/config'
+import PopularDisplayHeader from './popular-display-header'
 
 // functional component approach
 const MostPopular = () => {
@@ -16,6 +17,7 @@ const MostPopular = () => {
                 const topFiveSneakers = await fetch(`${serverURL}/sneaker/retrieve/popular/5`)
                 const sneaker = await topFiveSneakers.json()
                 setSneakerData({sneakers:sneaker.list})
+                setIsLoading(false)
                 // setIsLoading(false)
             }catch(error){
                 // setErrorState(true)
@@ -30,7 +32,7 @@ const MostPopular = () => {
 // </table>
     return(                    
         <div className='container'>
-            <h3 align='center'>Most Popular</h3>
+            <PopularDisplayHeader header={`Most Popular`}/>
                 {
                     isLoading ? <p>loading</p>:
                     <div>

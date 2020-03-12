@@ -5,11 +5,15 @@ import {
     getQuantity,
     getBid,
     getAsk,
+    getBidAll,
+    getAskAll,
     newEntry,
     getDetails
 } from '../tables/inventory-table'
 // router file to handle inventory API calls
 
+
+// get lowest ask, highest bid, quantity of a sneaker
 router.get('/inventory/details/:sneakerName',async(req,res)=>{
     try{
         const details = await getDetails(req.params.sneakerName)
@@ -22,7 +26,7 @@ router.get('/inventory/details/:sneakerName',async(req,res)=>{
     }
 })
 
-// posting a new entry
+// creating a new bid or ask entry
 router.post('/inventory/createEntry', async(req,res)=>{
     try{
         const entry = await newEntry(req.body)
@@ -34,39 +38,53 @@ router.post('/inventory/createEntry', async(req,res)=>{
         res.status(400).send(error)
     }
 })
-
-// getting ask prices for a sneaker
-router.get('/inventory/ask',async(req,res)=>{
+// TODO
+// get a list of all the lowest ask prices for a given sneaker, quanitty specified
+router.get('/inventory/price/ask/sneaker/:sneakerName/:quantity/',async (req,res)=>{
     try{
-        
+        let list = await getBid(req.params.sneakerName,req.params.quantity)
+        res.status(200).send(list)
     }catch(error){
         res.status(404).send(error)
     }
 })
 
-// getting bid prices for a sneaker
-router.get('/inventory/bid/:sneakerName/:quantity',async(req,res)=>{
+
+// get a list of all the lowest ask prices of all sneakers given a quantity
+router.get('/inventory/price/ask/all/:quantity/',async(req,res)=>{
     try{
-        res.status(200).send({working:'working'})
+        let list = await getAskAll(req.params.quantity)
+        res.status(200).send(list)
     }catch(error){
         res.status(404).send(error)
     }
 })
 
-// get quantity of a sneaker in stock
+// get a list ofaa ll the highest bid prices of all sneakers given a quantity
+router.get('/inventory/price/bid/all/:quantity',async(req,res)=>{
+    try{
+        let list = await getBidAll(req.params.quantity)
+        res.status(200).send(list)
+    }catch(error){
+        res.status(404).send(error)
+    }
+})
+
+
+// get quantity of a sneaker in stock type=> bid or ask
 // bid => true => bids
 // bid => false => asks
-router.get('/inventory/quantity/:sneakerName/:type',async(req,res)=>{
-    try{
-        const count = await getQuantity(req.params.sneakerName,req.params.type)
-        if(count.error){
-            throw count.error
-        }
-        res.status(200).send(count)
-    }catch(error){
-        res.status(404).send(error)
-    }
-})
+// router.get('/inventory/quantity/:sneakerName/:type',async(req,res)=>{
+//     try{
+//         const count = await getQuantity(req.params.sneakerName,req.params.type)
+//         if(count.error){
+//             throw count.error
+//         }
+//         res.status(200).send({quantity:count}) 
+//     }catch(error){
+//         res.status(404).send(error)
+//     }
+// })
 
 router.get('/inventory/test/:sneakerName',async(req,res)=>{
     try{

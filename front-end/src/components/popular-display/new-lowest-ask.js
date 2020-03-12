@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import {connect} from 'react-redux'
 import PopularItem from './popular-item'
 import {serverURL} from '../../../config/config'
+import PopularDisplayHeader from './popular-display-header'
 
 // component for lowest asking price shoes 
 const NewLowestAsk =()=>{
@@ -11,9 +12,9 @@ const NewLowestAsk =()=>{
         const fetchSneaker = async()=>{
             try{
                 setIsLoading(true)
-                const res = await fetch(`${serverURL}/sneaker/retrieve/popular/5`)
-                const sneaker = await res.json()
-                setSneakerData({sneakers:sneaker.list})
+                const res = await fetch(`${serverURL}/inventory/price/ask/all/5/`)
+                const sneakers = await res.json()
+                setSneakerData({sneakers})
                 setIsLoading(false)
             }catch(error){
                 console.log(error)
@@ -25,9 +26,9 @@ const NewLowestAsk =()=>{
 
     return(
     <div className='container'>
-        <h3 align='center'>New Lowest Ask</h3>
+        <PopularDisplayHeader header={`New Lowest Ask`}/>
         {
-            isLoading? <p></p>:
+            isLoading? <p>Loading...</p>:
             <div>
                 <table className='popular-table'>
                     <tbody>

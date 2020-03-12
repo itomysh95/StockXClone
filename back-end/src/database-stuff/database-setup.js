@@ -62,7 +62,6 @@ const tableSetup = async ()=>{
             `CREATE TABLE IF NOT EXISTS ${tables[2]}(
                 id                  SERIAL PRIMARY KEY,
                 "sneakerName"       VARCHAR(64) NOT NULL,
-                "quantity"          INTEGER NOT NULL,
                 "bid"               BOOLEAN NOT NULL,
                 "price"             MONEY NOT NULL,
                 FOREIGN KEY     ("sneakerName") REFERENCES ${tables[0]}("sneakerName") ON DELETE CASCADE    

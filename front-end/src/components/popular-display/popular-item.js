@@ -32,7 +32,6 @@ const PopularItem = (props)=>{
                     <div>
                         <p className='popular-item-name'>{props.sneakerName}</p>
                         <p className='popular-item-quantity'>Quantity in stock:{sneakerInventory.inventory.quantity}</p>
-                        <p className='popular-item-amount-sold'>{props.amountSold} SOLD</p>
                         <p className='popular-item-current-ask'>Current Ask Price {sneakerInventory.inventory.lowestAskPrice}</p>
                         <p className='popular-item-current-bid'>Current Bid Price {sneakerInventory.inventory.highestBidPrice}</p>
                     </div>

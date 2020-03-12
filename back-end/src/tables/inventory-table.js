@@ -2,12 +2,10 @@ import {pool} from '../database-stuff/database-pool'
 import {buildValues,toTitleCase} from '../database-stuff/database-queries'
 // id                  SERIAL PRIMARY KEY,
 // "sneakerName"       VARCHAR(64) NOT NULL,
-// "quantity"          INTEGER NOT NULL,
 // "bid"               BOOLEAN NOT NULL,
 // "price"             MONEY NOT NULL
 const inventoryParam = [
     `\"sneakerName\"`,
-    `\"quantity\"`,
     `\"bid\"`,
     `\"price\"`,
 ]
@@ -15,13 +13,13 @@ const inventoryParam = [
 
 const getQuantity = async(sneakerName,type)=>{
     try{
-        let buy = `${inventoryParam[2]}`
+        let buy = `${inventoryParam[1]}`
         // if we want the quantity of asks 
         if(type==='ask'){
-            buy = `NOT ${inventoryParam[2]}`
+            buy = `NOT ${inventoryParam[1]}`
         }
         let count = await pool.query(
-            `SELECT COUNT(${inventoryParam[2]})
+            `SELECT COUNT(${inventoryParam[1]})
             FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${buy}
@@ -34,32 +32,58 @@ const getQuantity = async(sneakerName,type)=>{
     }
 }
 
-
+// get an amount of bid prices of a given sneaker
 const getBid = async(sneakerName,amount)=>{
     try{
-        let data = await pool.query(
-            `SELECT ${inventoryParam[3]} FROM inventory
+        let bidPrices = await pool.query(
+            `SELECT ${inventoryParam[2]} FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
-            AND ${inventoryParam[2]}
-            ORDER BY ${inventoryParam[3]} ASC 
-            LIMIT ${amount}
+            AND ${inventoryParam[1]}
+            ORDER BY ${inventoryParam[2]} ASC 
+            FETCH FIRST ${amount} ROWS ONLY
             `,
             [sneakerName.toLowerCase()]
         )
-        return data.rows
+        return bidPrices.rows
     }catch(error){
         return {error}
     }
 }
 
+
+// select the minimum bid prices of all sneakers (amount to return specified in params)
+const getBidAll = async(amount)=>{
+    try{
+        let data = await pool.query(
+            // sort the inventory table by sneaker name, then by price
+            // next select the first row of each sneaker name (will return the highest price of each sneaker)
+            // finally sort the  highest price of every sneaker by price and take first n rows
+            `SELECT * FROM 
+            (SELECT DISTINCT ON (${inventoryParam[0]}) * 
+            FROM (
+                SELECT * FROM inventory
+                WHERE ${inventoryParam[1]}
+                ORDER BY ${inventoryParam[0]}, ${inventoryParam[2]} DESC 
+            ) AS inventorySorted) AS maxValues
+            ORDER BY ${inventoryParam[2]} DESC
+            FETCH FIRST ${amount} ROWS ONLY`
+        )
+        return data.rows
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
+
+// get an amount of ask prices of a given sneaker
 const getAsk = async(sneakerName,amount)=>{
     try{
         let data = await pool.query(
-            `SELECT ${inventoryParam[3]} FROM inventory
+            `SELECT ${inventoryParam[2]} FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
-            AND NOT ${inventoryParam[2]}
-            ORDER BY ${inventoryParam[3]} DESC
-            LIMIT ${amount}
+            AND NOT ${inventoryParam[1]}
+            ORDER BY ${inventoryParam[2]} DESC
+            FETCH FIRST ${amount} ROWS ONLY
             `,
             [sneakerName.toLowerCase()]
         )
@@ -69,13 +93,37 @@ const getAsk = async(sneakerName,amount)=>{
     }
 }
 
+// get an amount of lowest ask prices of all sneakers
+const getAskAll = async(amount)=>{
+    try{
+        let data = await pool.query(
+            // sort the inventory table by sneaker name, then by price
+            // next select the first row of each sneaker name (will return the lowest price of each sneaker)
+            // finally sort the lowest price of every sneaker by price and take first n rows
+            `SELECT * FROM 
+            (SELECT DISTINCT ON (${inventoryParam[0]}) * 
+            FROM (
+                SELECT * FROM inventory
+                WHERE NOT ${inventoryParam[1]}
+                ORDER BY ${inventoryParam[0]}, ${inventoryParam[2]} ASC 
+            ) AS inventorySorted) AS minimumValues
+            ORDER BY ${inventoryParam[2]} ASC
+            FETCH FIRST ${amount} ROWS ONLY`
+        )
+        return data.rows
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
+
+// to create a new bid/ask entry
 const newEntry = async(entryDetails)=>{
     try{
         // fix case sensitivity, upper case the start of every letter
         let keyValue = {...entryDetails, 
             sneakerName:toTitleCase(entryDetails.sneakerName)
         }
-        console.log(keyValue.price)
         // wrap the column names by quotes
         const columns = Object.keys(keyValue).map((columnName)=>`\"${columnName}\"`)
         const values = buildValues(Object.values(keyValue))
@@ -92,6 +140,7 @@ const newEntry = async(entryDetails)=>{
     }
 }
 
+// get lowest ask, highest bid and quantity in stock of a sneaker
 const getDetails = async(sneakerName)=>{
     try{
         let lowestAskPrice = await getAsk(sneakerName,1);
@@ -125,5 +174,7 @@ export {
     getBid,
     getAsk,
     newEntry,
-    getDetails
+    getDetails,
+    getBidAll,
+    getAskAll
 }

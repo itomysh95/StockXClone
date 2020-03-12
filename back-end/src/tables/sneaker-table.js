@@ -156,6 +156,22 @@ const getPopular = async(amount)=>{
     }
 }
 
+// get the most popular brands
+const getPopularBrands = async(amount)=>{
+    try{
+        const brandList = await pool.query(
+            `SELECT ${sneakerParams[3]},count(${sneakerParams[2]}) AS sold 
+            FROM sneaker
+            GROUP BY ${sneakerParams[3]}
+            ORDER BY sold DESC
+            FETCH FIRST ${amount} ROWS ONLY
+            `
+        )
+        return {brands:brandList.rows}
+    }catch(error){
+        console.log(error)
+    }
+}
 
 export{
     getSneaker,
@@ -163,5 +179,6 @@ export{
     updateSneakerInfo,
     deleteSneaker,
     getPopular,
-    createSneaker
+    createSneaker,
+    getPopularBrands
 }
