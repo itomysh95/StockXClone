@@ -39,7 +39,7 @@ const validateAndHash = async (reqBody)=>{
         // return the validiated and hashed account details
         return {...reqBody,password:hashPass}
     }catch(error){
-        throw {error:error}
+        throw {error}
     }
 }
 // create a new account in database
@@ -61,7 +61,7 @@ const createAccount = async(reqBody)=>{
         const jwt = await tokenForAccount(account.rows[0])
         return {...account.rows, jwtToken:jwt}
     }catch(error){
-        return error
+        return {error}
     }
 }
 

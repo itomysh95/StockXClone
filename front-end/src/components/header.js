@@ -1,9 +1,10 @@
 import {NavLink,Link} from 'react-router-dom'
 import React from 'react'
+import { connect } from 'react-redux'
 
 
 // top navbar
-const Header= ()=>( 
+const Header= (props)=>( 
     <div>
         <div className="navbar navbar-expand-lg">
                 <Link className="navbar-brand mr-auto" to='/' exact={true}>
@@ -15,11 +16,28 @@ const Header= ()=>(
                 <NavLink to='/help' exact={true} activeClassName="is-active" >Portfolio</NavLink>
                 <NavLink to='/help' exact={true} activeClassName="is-active" >About</NavLink>
                 <NavLink to='/help' exact={true} activeClassName="is-active" >Help</NavLink>
-                <NavLink to='/help' exact={true} activeClassName="is-active" >Login</NavLink>
-                <NavLink to='/signup' exact={true} activeClassName="is-active" >Sign Up</NavLink>
+                { props.loggedIn?<Link to='/' exact={true} >LogOut</Link>
+                    :
+                    <div>
+                        <Link to='/signup' exact={true} >Login</Link>
+                        <Link to='/signup' exact={true} >SignUp</Link>
+                    </div>
+                }
                 <NavLink to='/help' exact={true} activeClassName="is-active" >Sell</NavLink>
         </div>
     </div>
 )
 
-export default Header;
+const mapStateToProps = (state)=>{
+    // return what information from the store we want our component to be able
+    // to access
+    return{
+        loggedIn:state.account.loggedIn
+    }
+}
+
+const mapDispatchToProps = (dispatch,props)=>({
+    setLogOut:()=>dispatch(setLoggedOut())
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(Header);

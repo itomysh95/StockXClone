@@ -49,7 +49,6 @@ const PopularBrands=()=>{
                 </div>
             }
         </div>
-        <BrandLogo />
     </div>
     )
 }
