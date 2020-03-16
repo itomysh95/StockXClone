@@ -14,9 +14,9 @@ const MostPopular = () => {
             try{
                 setIsLoading(true)
                 // read in the data
-                const topFiveSneakers = await fetch(`${serverURL}/sneaker/retrieve/popular/5`)
-                const sneaker = await topFiveSneakers.json()
-                setSneakerData({sneakers:sneaker.list})
+                const res = await fetch(`${serverURL}/sneaker/retrieve/popular/5`)
+                const topFiveSneakers = await res.json()
+                setSneakerData({sneakers:topFiveSneakers.list})
                 setIsLoading(false)
                 // setIsLoading(false)
             }catch(error){

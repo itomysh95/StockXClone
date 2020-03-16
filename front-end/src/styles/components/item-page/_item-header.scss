@@ -1,0 +1,23 @@
+.item-header-buttons{
+    border: solid black thin;
+    border-radius: 25px;
+    padding:10px;
+    font-family: Lucida Console;
+    font-weight: bolder;
+    color: black;
+}
+
+#item-page-item-name{
+    font-weight: bolder;
+    font-size: 5rem;
+}
+
+.item-header-path{
+    color:rgb(68, 68, 68);
+    font-size:1.3rem;
+    padding:4px;
+}
+
+.item-header-path:hover{
+    color:black;
+}

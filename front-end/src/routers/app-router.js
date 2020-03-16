@@ -5,7 +5,8 @@ import HelpPage from '../components/help-page';
 import NotFoundPage from '../components/not-found-page';
 import Header from '../components/header'
 import SignupPage from '../components/signup-page/signup-page';
-
+import ItemPage from '../components/item-page/item-page'
+import BuySellPage from '../components/buy-sell-page/buy-sell-page'
 
 const AppRouter = ()=>(
     <BrowserRouter>
@@ -16,6 +17,9 @@ const AppRouter = ()=>(
                 <Route path="/help" component={HelpPage} />
                 <Route path="/signup" component ={SignupPage} />
                 <Route path="/login" component = {SignupPage} />
+                <Route path={`/item/sneaker/:name`} exact={true} component={ItemPage} />
+                <Route path={`/item/buy/:name`} exact={true} component={BuySellPage}/>
+                <Route path={`/item/sell/:name`} exact={true} component={BuySellPage}/>
                 <Route component={NotFoundPage} />
             </Switch>
         </div>

@@ -8,3 +8,8 @@ export const setLoggedIn = ()=>({
 export const setLoggedOut = ()=>({
     type: 'SET_LOGGEDOUT'
 })
+
+export const setUsername = (username)=>({
+    type: 'SET_USERNAME',
+    username
+})

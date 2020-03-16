@@ -28,10 +28,14 @@ const SignupScreen = (props)=>{
                 <input className='form-control' type='text' id='AccountName' placeholder='Account Name' onChange={e => props.setAccountName(e.target.value)}/>
             </div>
             <div className="form-group has-feedback">
-                <input className='form-control' type='email' id='Email' placeholder='Email Address' onChange={e => props.setEmail(e.target.value)}/>
+                <input className='form-control' type='email' id='Email' placeholder='Email Address' 
+                    onChange={e => props.setEmail(e.target.value)} autoComplete="on"
+                />
             </div>
             <div className="form-group has-feedback">
-                <input className='form-control' type='password' id='Password' placeholder='Password' onChange={e => props.setPassword(e.target.value)} />
+                <input className='form-control' type='password' id='Password' placeholder='Password' 
+                    onChange={e => props.setPassword(e.target.value)} autoComplete="on"
+                />
                 <span className="fa fa-eye-slash form-control-feedback" onClick={()=>reveal()} />
             </div>
             <div>

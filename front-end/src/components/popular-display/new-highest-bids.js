@@ -12,7 +12,7 @@ const NewHighestBids =()=>{
         const fetchSneaker = async()=>{
             try{
                 setIsLoading(true)
-                const res = await fetch(`${serverURL}/inventory/price/bid/all/5/`)
+                const res = await fetch(`${serverURL}/inventory/price/bid/all/5`)
                 const sneakers = await res.json()
                 setSneakerData({sneakers})
                 setIsLoading(false)

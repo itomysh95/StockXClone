@@ -3,11 +3,13 @@ import {buildValues,toTitleCase} from '../database-stuff/database-queries'
 // id                  SERIAL PRIMARY KEY,
 // "sneakerName"       VARCHAR(64) NOT NULL,
 // "bid"               BOOLEAN NOT NULL,
-// "price"             MONEY NOT NULL
+// "price"             MONEY NOT NULL,
+// "size"              FLOAT NOT NULL
 const inventoryParam = [
     `\"sneakerName\"`,
     `\"bid\"`,
     `\"price\"`,
+    `\"size\"`
 ]
 
 

@@ -7,9 +7,9 @@ import PopularLinks from './popular-links'
 
 const PageEnd = ()=>(
     <div>
-        <PopularLinks />
-        <SocialMedia />
-        <Information />
+        <PopularLinks>TODO</PopularLinks>
+        <SocialMedia>TODO</SocialMedia>
+        <Information>TODO</Information>
     </div>
 )
 

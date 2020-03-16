@@ -25,10 +25,14 @@ const LoginScreen = (props)=>{
             <span id="hr-or">OR</span>
             <hr id="hr-signup" />
             <div className="form-group has-feedback">
-                <input className='form-control' type='email' id='Email' placeholder='Email Address' onChange={e => props.setEmail(e.target.value)}/>
+                <input className='form-control' type='email' id='Email' placeholder='Email Address' 
+                    onChange={e => props.setEmail(e.target.value)} autoComplete="on"
+                />
             </div>
             <div className="form-group has-feedback">
-                <input className='form-control' type='password' id='Password' placeholder='Password' onChange={e => props.setPassword(e.target.value)} />
+                <input className='form-control' type='password' id='Password' placeholder='Password' 
+                    onChange={e => props.setPassword(e.target.value)} autoComplete="on"
+                />
                 <span className="fa fa-eye-slash form-control-feedback" onClick={()=>reveal()} />
             </div>
             <div>

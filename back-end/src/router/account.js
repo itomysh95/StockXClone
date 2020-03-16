@@ -68,14 +68,14 @@ router.delete('/account/settings/delete',auth,async (req,res)=>{
 
 // TODO 
 // login the account
-router.get('/account/login', async (req,res)=>{
+router.post('/account/login', async (req,res)=>{
     try{
         const account = await signinAccount(req.body.email,req.body.password)
         if(account.error){
             throw account.error
         }
         const token = await tokenForAccount(account)
-        res.status(200).send({account,token})
+        res.status(200).send({account,jwtToken:token})
     }catch(error){
         res.status(400).send(error)
     }

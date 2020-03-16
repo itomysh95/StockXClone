@@ -9,7 +9,6 @@ body {
 
 h1{
     font-size: $medium-size;
-    color: white;
     text-align: center;
 }
 
@@ -32,4 +31,77 @@ button:disabled{
 
 .see-all{
     color: #2a9c3d;
+}
+
+.font-color-grey{
+    color: rgb(114, 114, 114);
+}
+.font-color-light-grey{
+    color: rgb(165, 165, 165)
+}
+.font-color-black{
+    color: rgb(0, 0, 0);
+}
+
+.font-color-green{
+    color: rgb(6, 97, 6);
+}
+
+.font-family-sans-serif{
+    font-family: sans-serif;
+}
+
+.text-size-medium{
+    font-weight:bolder;
+    font-size:$medium-size;
+}
+
+.text-size-s-m{
+    font-weight:bolder;
+    font-size:$s-m;
+}
+
+.side-by-side{
+    display:flex; 
+    flex-direction: row; 
+    justify-content: center;
+}
+
+.margin-none{
+    margin:0px;
+}
+
+.margin-t-b-lg{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+
+.padding-t-b-lg{
+    margin-top:20px;
+    margin-bottom: 20px;
+}
+
+.padding-none{
+    padding-left:0px;
+    padding-right:0px;
+}
+
+.background-c-light-grey{
+    background-color:rgb(209, 209, 209)
+}
+
+.caps{
+    text-transform: uppercase;
+}
+
+.stretch-background{
+    width:100%;
+}
+
+.flex-display{
+    padding-top:20px;
+    padding-bottom: 20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }

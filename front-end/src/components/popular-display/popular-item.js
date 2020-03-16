@@ -28,7 +28,7 @@ const PopularItem = (props)=>{
             {
                 isLoading ? <p>loading...</p>
                 :
-                <Link to={`/${props.sneakerName}`} className='popular-item'>
+                <Link to={`/item/sneaker/${props.sneakerName}`} className='popular-item'>
                     <div>
                         <p className='popular-item-name'>{props.sneakerName}</p>
                         <p className='popular-item-quantity'>Quantity in stock:{sneakerInventory.inventory.quantity}</p>

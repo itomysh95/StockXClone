@@ -13,14 +13,18 @@ import {pool} from '../database-stuff/database-pool'
     // "sneakerName"   VARCHAR(64) UNIQUE NOT NULL,
     // "amountSold"    INTEGER NOT NULL,
     // "sneakerInfo"   TEXT,
-    // "brandName"     VARCHAR(64) NOT NULL 
+    // "brandName"     VARCHAR(64) NOT NULL, 
+    // "retailPrice"   MONEY,
+    // "male"          BOOLEAN NOT NULL
 // );
 
 const sneakerParams = [
     `\"sneakerName\"`,
     `\"amountSold\"`,
     `\"sneakerInfo\"`,
-    `\"brandName\"`
+    `\"brandName\"`,
+    `\"retailPrice\"`,
+    `\"male\"`
 ]
 
 // TODO figure out best way to throw errors for error handling...
@@ -173,6 +177,19 @@ const getPopularBrands = async(amount)=>{
     }
 }
 
+// get retail price of a sneaker
+const getRetailPrice = async(sneakerName)=>{
+    try{
+        const retailPrice = await pool.query(
+            `SELECT ${sneakerParams[4]} FROM sneaker
+            WHERE LOWER ${sneakerParams[0]}=$1`
+        ,[sneakerName.toLowerCase()])
+        return{price:retailPrice.rows}
+    }catch(error){
+        console.log(error)
+    }
+}
+
 export{
     getSneaker,
     getSneakers,
@@ -180,5 +197,6 @@ export{
     deleteSneaker,
     getPopular,
     createSneaker,
-    getPopularBrands
+    getPopularBrands,
+    getRetailPrice
 }
