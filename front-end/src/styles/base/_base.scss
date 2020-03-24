@@ -29,10 +29,6 @@ button:disabled{
     font-weight:bold;
 }
 
-.see-all{
-    color: #2a9c3d;
-}
-
 .font-color-grey{
     color: rgb(114, 114, 114);
 }
@@ -41,6 +37,14 @@ button:disabled{
 }
 .font-color-black{
     color: rgb(0, 0, 0);
+}
+
+.font-color-light-green{
+    color: #2a9c3d;
+}
+
+.font-color-red{
+    color:rgb(156, 1, 1);
 }
 
 .font-color-green{
@@ -61,6 +65,10 @@ button:disabled{
     font-size:$s-m;
 }
 
+.text-size-s{
+    font-size:$s;
+}
+
 .side-by-side{
     display:flex; 
     flex-direction: row; 
@@ -77,8 +85,8 @@ button:disabled{
 }
 
 .padding-t-b-lg{
-    margin-top:20px;
-    margin-bottom: 20px;
+    padding-top:20px;
+    padding-bottom: 20px;
 }
 
 .padding-none{
@@ -88,6 +96,10 @@ button:disabled{
 
 .background-c-light-grey{
     background-color:rgb(209, 209, 209)
+}
+
+.background-c-white{
+    background-color:white;
 }
 
 .caps{
@@ -104,4 +116,53 @@ button:disabled{
     display:flex;
     justify-content:center;
     align-items:center;
+}
+
+.hover-pointer{
+    cursor:pointer;
+}
+
+.bottom-fixed{
+    bottom:0;
+    width:100%;
+}
+
+.hr-dot{
+    background-color: #fff;
+	border-top: 2px dotted #8c8b8b;
+}
+
+.left-space-right{
+    display: flex;
+    justify-content: space-between;
+}
+
+.rtl{
+    direction: rtl;
+}
+
+.border-0{
+    border: none;
+}
+
+.form-control:read-only{
+    background-color: white !important;
+    font-weight:bolder;
+    font-size:$medium-size;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+
+.width-80{
+    width:80%;
+}
+
+.position-relative{
+    position: relative;
 }

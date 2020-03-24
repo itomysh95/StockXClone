@@ -8,7 +8,8 @@ import {
     getBidAll,
     getAskAll,
     newEntry,
-    getDetails
+    getDetails,
+    getSizePrice
 } from '../tables/inventory-table'
 // router file to handle inventory API calls
 
@@ -40,7 +41,7 @@ router.post('/inventory/createEntry', async(req,res)=>{
 })
 // TODO
 // get a list of all the lowest ask prices for a given sneaker, quanitty specified
-router.get('/inventory/price/ask/sneaker/:sneakerName/:quantity/',async (req,res)=>{
+router.get('/inventory/price/ask/sneaker/:sneakerName/:quantity',async (req,res)=>{
     try{
         let list = await getBid(req.params.sneakerName,req.params.quantity)
         res.status(200).send(list)
@@ -51,7 +52,7 @@ router.get('/inventory/price/ask/sneaker/:sneakerName/:quantity/',async (req,res
 
 
 // get a list of all the lowest ask prices of all sneakers given a quantity
-router.get('/inventory/price/ask/all/:quantity/',async(req,res)=>{
+router.get('/inventory/price/ask/all/:quantity',async(req,res)=>{
     try{
         let list = await getAskAll(req.params.quantity)
         res.status(200).send(list)
@@ -60,7 +61,7 @@ router.get('/inventory/price/ask/all/:quantity/',async(req,res)=>{
     }
 })
 
-// get a list ofaa ll the highest bid prices of all sneakers given a quantity
+// get a list of all the highest bid prices of all sneakers given a quantity
 router.get('/inventory/price/bid/all/:quantity',async(req,res)=>{
     try{
         let list = await getBidAll(req.params.quantity)
@@ -91,6 +92,26 @@ router.get('/inventory/test/:sneakerName',async(req,res)=>{
         let details = await getDetails(req.params.sneakerName)
         console.log(details)
         res.status(200).send(details)
+    }catch(error){
+        res.status(400).send(error)
+    }
+})
+
+// get the lowest ask prices of each size of a given sneaker
+router.get('/inventory/retrieve/ask/size/:sneakerName',async(req,res)=>{
+    try{
+        let prices = await getSizePrice(req.params.sneakerName,'NOT')
+        res.status(200).send(prices)
+    }catch(error){
+        res.status(400).send(error)
+    }
+})
+
+// get the highest bid prices of each size of a given sneaker
+router.get('/inventory/retrieve/bid/size/:sneakerName',async(req,res)=>{
+    try{
+        let prices = await getSizePrice(req.params.sneakerName)
+        res.status(200).send(prices)
     }catch(error){
         res.status(400).send(error)
     }

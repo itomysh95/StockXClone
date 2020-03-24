@@ -71,11 +71,12 @@ const updateSneakerInfo=async(sneakerName,sneakerUpdates)=>{
     try{
         const updates = await updateQueryBuilder(sneakerUpdates)
         const sneaker = await pool.query(
-                    `UPDATE sneaker 
-                    SET ${updates} 
-                    WHERE LOWER(${sneakerParams[0]})=$1
-                    RETURNING *`,
-                    [sneakerName.toLowerCase()])
+            `UPDATE sneaker 
+            SET ${updates} 
+            WHERE LOWER(${sneakerParams[0]})=$1
+            RETURNING *`,
+            [sneakerName.toLowerCase()]
+            )
         // if the sneaker does not exist
         if(sneaker.rows.length===0){
             throw {error:'sneaker does not exist'}

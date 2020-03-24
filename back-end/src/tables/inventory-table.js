@@ -9,8 +9,33 @@ const inventoryParam = [
     `\"sneakerName\"`,
     `\"bid\"`,
     `\"price\"`,
-    `\"size\"`
+    `\"size\"`,
+    `\"male\"`,
 ]
+
+// get the lowest ask or highest bid prices of a sneaker based on size
+// if bid parameter empty => bid, if bid parameter = NOT => ask
+const getSizePrice= async(sneakerName,bid='')=>{
+    try{
+        let prices = await pool.query(
+            `SELECT DISTINCT ON (${inventoryParam[3]}) 
+            ${inventoryParam[2]},${inventoryParam[3]} 
+            FROM inventory
+            WHERE LOWER(${inventoryParam[0]})=$1
+            AND ${bid} ${inventoryParam[1]}
+            ORDER BY ${inventoryParam[3]},${inventoryParam[2]} ASC
+            `,[sneakerName.toLowerCase()]
+        )
+        let sizePrices={}
+        prices.rows.map(priceSizePair=>{
+            sizePrices[priceSizePair.size*10]=priceSizePair.price
+        })
+        return sizePrices
+    }catch(error){
+        console.log(error)
+        return{error}
+    }
+}
 
 
 const getQuantity = async(sneakerName,type)=>{
@@ -41,7 +66,7 @@ const getBid = async(sneakerName,amount)=>{
             `SELECT ${inventoryParam[2]} FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${inventoryParam[1]}
-            ORDER BY ${inventoryParam[2]} ASC 
+            ORDER BY ${inventoryParam[2]} DESC 
             FETCH FIRST ${amount} ROWS ONLY
             `,
             [sneakerName.toLowerCase()]
@@ -53,7 +78,7 @@ const getBid = async(sneakerName,amount)=>{
 }
 
 
-// select the minimum bid prices of all sneakers (amount to return specified in params)
+// select the highest bid prices of all sneakers (amount to return specified in params)
 const getBidAll = async(amount)=>{
     try{
         let data = await pool.query(
@@ -84,7 +109,7 @@ const getAsk = async(sneakerName,amount)=>{
             `SELECT ${inventoryParam[2]} FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND NOT ${inventoryParam[1]}
-            ORDER BY ${inventoryParam[2]} DESC
+            ORDER BY ${inventoryParam[2]} ASC
             FETCH FIRST ${amount} ROWS ONLY
             `,
             [sneakerName.toLowerCase()]
@@ -138,6 +163,7 @@ const newEntry = async(entryDetails)=>{
         )
         return {data:data.rows[0]}
     }catch(error){
+        console.log(error)
         return {error}
     }
 }
@@ -178,5 +204,6 @@ export {
     newEntry,
     getDetails,
     getBidAll,
-    getAskAll
+    getAskAll,
+    getSizePrice
 }

@@ -5,7 +5,7 @@ const PopularDisplayHeader = (props)=>{
     return(
         <h3 className='categories-label-popular-component'>{`${props.header}`} 
             <span align='right'>
-                <Link to={`/sneakers`} className='see-all'>See All</Link>
+                <Link to={`/sneakers`} className='font-color-light-green'>See All</Link>
             </span>
         </h3>
     )

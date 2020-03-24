@@ -1,17 +1,15 @@
 import React, {useState,useEffect} from 'react'
-import ItemPicture from '../item-page/item-picture'
+import ItemImage from '../item-image'
 import {serverURL} from '../../../config/config'
 import {Link} from 'react-router-dom'
-import SizeChart from '../size-chart'
+import Order from './order'
 
 
 const BuySellPage=(props)=>{
-
-    console.log(props)
     return(
         <div className='side-by-side'>
-            <ItemPicture />
-            <SizeChart />
+            <ItemImage name={props.match.params.name}/>
+            <Order name={props.match.params.name} buy={props.buy}/>
         </div>
     )
 }

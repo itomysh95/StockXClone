@@ -18,8 +18,8 @@ const AppRouter = ()=>(
                 <Route path="/signup" component ={SignupPage} />
                 <Route path="/login" component = {SignupPage} />
                 <Route path={`/item/sneaker/:name`} exact={true} component={ItemPage} />
-                <Route path={`/item/buy/:name`} exact={true} component={BuySellPage}/>
-                <Route path={`/item/sell/:name`} exact={true} component={BuySellPage}/>
+                <Route path={`/item/buy/:name`} exact={true} render={(props)=><BuySellPage {...props} buy={true} />} />
+                <Route path={`/item/sell/:name`} exact={true} render={(props)=><BuySellPage {...props} buy={false} />}/>
                 <Route component={NotFoundPage} />
             </Switch>
         </div>

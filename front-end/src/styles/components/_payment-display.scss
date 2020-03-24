@@ -1,0 +1,78 @@
+
+i.edit-pen {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: grayscale($color: #575353fa);
+    cursor:pointer;
+}
+
+#prev-order-details{
+    font-size:1.5rem;
+    font-weight:bolder;
+    font-family: sans-serif;
+}
+
+#next-order-details{
+    font-size:1.5rem;
+    font-weight:bolder;
+    font-family: sans-serif;
+}
+
+#check-discount-button{
+    font-weight:lighter;
+    font-size:1rem;
+    font-family: sans-serif;
+    height:75%;
+    margin:0;
+}
+
+
+// .payment-details{
+//     padding-top:20px;
+//     padding-bottom: 20px;
+//     display:flex;
+//     justify-content:flex-start;
+//     flex-grow: initial;
+// }
+
+.prev-next-buttons{
+    padding-top:20px;
+    padding-bottom: 20px;
+    display:flex;
+    justify-content:space-between;
+    min-width:0;
+}
+
+#cancel-order{
+    position:relative;
+    bottom:0;
+    left: 90%;
+    font-size:1.5rem;
+    font-weight:bolder;
+    font-family: sans-serif;
+}
+
+#payment-fullname,#payment-card-num{
+    margin-top: 2.5px;
+    margin-bottom: 2.5px;
+    width:80%;
+    
+}
+#payment-expiry-date,#payment-cvv{
+    margin-top: 2.5px;
+    margin-bottom: 2.5px;
+    width:25%;
+}
+
+#change-size-button{
+    width:60%;
+    margin:20px;
+    padding:20px;
+    font-family:sans-serif;
+    font-weight:bolder;
+    font-size:1.5rem;
+    border:2px solid rgb(172, 172, 172);
+    background-color:white;
+}

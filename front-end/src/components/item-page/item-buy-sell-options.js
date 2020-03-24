@@ -58,7 +58,7 @@ const ItemBuySellOptions=(props)=>{
                                         <p className='font-color-light-grey text-size-medium margin-none'>Highest Bid</p>
                                     </div>
                                     <p> 
-                                        <span className='separator'></span>
+                                        <span className='separator'/>
                                     </p>
                                     <div className='container'> 
                                         <p className='font-color-white text-size-medium margin-none'>Sell</p>
