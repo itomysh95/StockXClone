@@ -3,10 +3,8 @@ const router = new express.Router()
 router.use(express.json())
 import {
     getQuantity,
-    getBid,
-    getAsk,
-    getBidAll,
-    getAskAll,
+    getPrices,
+    getPricesAll,
     newEntry,
     getDetails,
     getSizePrice
@@ -41,9 +39,10 @@ router.post('/inventory/createEntry', async(req,res)=>{
 })
 // TODO
 // get a list of all the lowest ask prices for a given sneaker, quanitty specified
+// 'NOT' specifies it's an ask and not a bid request
 router.get('/inventory/price/ask/sneaker/:sneakerName/:quantity',async (req,res)=>{
     try{
-        let list = await getBid(req.params.sneakerName,req.params.quantity)
+        let list = await getPrices(req.params.sneakerName,req.params.quantity,'NOT')
         res.status(200).send(list)
     }catch(error){
         res.status(404).send(error)
@@ -54,9 +53,10 @@ router.get('/inventory/price/ask/sneaker/:sneakerName/:quantity',async (req,res)
 // get a list of all the lowest ask prices of all sneakers given a quantity
 router.get('/inventory/price/ask/all/:quantity',async(req,res)=>{
     try{
-        let list = await getAskAll(req.params.quantity)
+        let list = await getPricesAll(req.params.quantity)
         res.status(200).send(list)
     }catch(error){
+        console.log(error)
         res.status(404).send(error)
     }
 })
@@ -64,7 +64,7 @@ router.get('/inventory/price/ask/all/:quantity',async(req,res)=>{
 // get a list of all the highest bid prices of all sneakers given a quantity
 router.get('/inventory/price/bid/all/:quantity',async(req,res)=>{
     try{
-        let list = await getBidAll(req.params.quantity)
+        let list = await getPricesAll(req.params.quantity,'NOT')
         res.status(200).send(list)
     }catch(error){
         res.status(404).send(error)

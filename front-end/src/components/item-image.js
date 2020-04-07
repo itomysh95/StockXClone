@@ -3,7 +3,7 @@ import React,{useEffect, useState} from 'react'
 const ItemImage =(props)=>{
     const [imageSrc,setImageSrc]=useState([])
     useEffect(()=>{
-        // TODO linnk this to image
+        // TODO link this to image
         setImageSrc('/images/no-image-found.jpg')
     },[])
     return(

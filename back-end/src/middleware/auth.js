@@ -34,7 +34,6 @@ const tokenForAccount = async (account)=>{
 
     // create a new token for given account
     const token = await jwt.sign({_id:account.id.toString()},jwtConfig,{expiresIn:'1h'})
-    console.log(jwt.verify(token,jwtConfig))
     return token
 }
 

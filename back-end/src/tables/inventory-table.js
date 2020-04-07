@@ -19,7 +19,7 @@ const getSizePrice= async(sneakerName,bid='')=>{
     try{
         let prices = await pool.query(
             `SELECT DISTINCT ON (${inventoryParam[3]}) 
-            ${inventoryParam[2]},${inventoryParam[3]} 
+            ${inventoryParam[2]},${inventoryParam[3]} ,id
             FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${bid} ${inventoryParam[1]}
@@ -28,8 +28,19 @@ const getSizePrice= async(sneakerName,bid='')=>{
         )
         let sizePrices={}
         prices.rows.map(priceSizePair=>{
-            sizePrices[priceSizePair.size*10]=priceSizePair.price
+            sizePrices[priceSizePair.size*10]=[priceSizePair.price,priceSizePair.id]
         })
+
+        // for those sizes that do not have any bids/asks yet, set value to ask/bid, and id to null
+        let i;
+        for(i=3;i<19;i++){
+            if(!sizePrices[i*10]){
+                sizePrices[i*10]=[null,null]
+            }
+            if(!sizePrices[(i+0.5)*10]){
+                sizePrices[(i+0.5)*10]=[null,null]
+            }
+        }
         return sizePrices
     }catch(error){
         console.log(error)
@@ -59,19 +70,24 @@ const getQuantity = async(sneakerName,type)=>{
     }
 }
 
-// get an amount of bid prices of a given sneaker
-const getBid = async(sneakerName,amount)=>{
+// get an amount of bid/ask prices of a given sneaker
+const getPrices = async(sneakerName,amount,bid='')=>{
     try{
-        let bidPrices = await pool.query(
+        let order = 'DESC'
+        if(bid==='NOT'){
+            order = 'ASC'
+        }
+        // if bid value='NOT' will return ask values
+        let prices = await pool.query(
             `SELECT ${inventoryParam[2]} FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
-            AND ${inventoryParam[1]}
-            ORDER BY ${inventoryParam[2]} DESC 
+            AND ${bid} ${inventoryParam[1]}
+            ORDER BY ${inventoryParam[2]} ${order} 
             FETCH FIRST ${amount} ROWS ONLY
             `,
             [sneakerName.toLowerCase()]
         )
-        return bidPrices.rows
+        return prices.rows
     }catch(error){
         return {error}
     }
@@ -79,9 +95,13 @@ const getBid = async(sneakerName,amount)=>{
 
 
 // select the highest bid prices of all sneakers (amount to return specified in params)
-const getBidAll = async(amount)=>{
+const getPricesAll = async(amount,bid='')=>{
     try{
-        let data = await pool.query(
+        let order = 'DESC'
+        if(bid==='NOT'){
+            order = 'ASC'
+        }
+        let prices = await pool.query(
             // sort the inventory table by sneaker name, then by price
             // next select the first row of each sneaker name (will return the highest price of each sneaker)
             // finally sort the  highest price of every sneaker by price and take first n rows
@@ -89,60 +109,19 @@ const getBidAll = async(amount)=>{
             (SELECT DISTINCT ON (${inventoryParam[0]}) * 
             FROM (
                 SELECT * FROM inventory
-                WHERE ${inventoryParam[1]}
-                ORDER BY ${inventoryParam[0]}, ${inventoryParam[2]} DESC 
+                WHERE ${bid} ${inventoryParam[1]}
+                ORDER BY ${inventoryParam[0]}, ${inventoryParam[2]} ${order}
             ) AS inventorySorted) AS maxValues
-            ORDER BY ${inventoryParam[2]} DESC
+            ORDER BY ${inventoryParam[2]} ${order}
             FETCH FIRST ${amount} ROWS ONLY`
         )
-        return data.rows
+        return prices.rows
     }catch(error){
         console.log(error)
         return {error}
     }
 }
 
-// get an amount of ask prices of a given sneaker
-const getAsk = async(sneakerName,amount)=>{
-    try{
-        let data = await pool.query(
-            `SELECT ${inventoryParam[2]} FROM inventory
-            WHERE LOWER(${inventoryParam[0]})=$1
-            AND NOT ${inventoryParam[1]}
-            ORDER BY ${inventoryParam[2]} ASC
-            FETCH FIRST ${amount} ROWS ONLY
-            `,
-            [sneakerName.toLowerCase()]
-        )
-        return data.rows
-    }catch(error){
-        return {error}
-    }
-}
-
-// get an amount of lowest ask prices of all sneakers
-const getAskAll = async(amount)=>{
-    try{
-        let data = await pool.query(
-            // sort the inventory table by sneaker name, then by price
-            // next select the first row of each sneaker name (will return the lowest price of each sneaker)
-            // finally sort the lowest price of every sneaker by price and take first n rows
-            `SELECT * FROM 
-            (SELECT DISTINCT ON (${inventoryParam[0]}) * 
-            FROM (
-                SELECT * FROM inventory
-                WHERE NOT ${inventoryParam[1]}
-                ORDER BY ${inventoryParam[0]}, ${inventoryParam[2]} ASC 
-            ) AS inventorySorted) AS minimumValues
-            ORDER BY ${inventoryParam[2]} ASC
-            FETCH FIRST ${amount} ROWS ONLY`
-        )
-        return data.rows
-    }catch(error){
-        console.log(error)
-        return {error}
-    }
-}
 
 // to create a new bid/ask entry
 const newEntry = async(entryDetails)=>{
@@ -171,8 +150,8 @@ const newEntry = async(entryDetails)=>{
 // get lowest ask, highest bid and quantity in stock of a sneaker
 const getDetails = async(sneakerName)=>{
     try{
-        let lowestAskPrice = await getAsk(sneakerName,1);
-        let highestBidPrice = await getBid(sneakerName,1);
+        let lowestAskPrice = await getPrices(sneakerName,1,'NOT');
+        let highestBidPrice = await getPrices(sneakerName,1);
         // if there are no bid or ask prices, set it to none
         if(!lowestAskPrice[0]){
             lowestAskPrice = 'None'
@@ -197,13 +176,48 @@ const getDetails = async(sneakerName)=>{
     }
 }
 
+// find and return a quote by id
+const getById = async(id)=>{
+    try{
+        let quote = await pool.query(
+            `SELECT * FROM INVENTORY 
+            WHERE id = $1
+            `
+        ,[id])
+        return quote.rows
+    }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
+
+//  find a quote by id and set the status to completed, return true if set,
+// else false
+const completeQuote = async(id)=>{
+    try{
+        let quote = await pool.query(
+            `UPDATE inventory
+            SET completed=true
+            WHERE id = $1
+            RETURNING *`,
+            [id]
+        )
+        if(quote.rows){
+            return true
+        }
+        return false
+    }catch(error){
+        return {error}
+    }
+}
+
 export {
     getQuantity,
-    getBid,
-    getAsk,
+    getPrices,
     newEntry,
     getDetails,
-    getBidAll,
-    getAskAll,
-    getSizePrice
+    getPricesAll,
+    getSizePrice,
+    getById,
+    completeQuote,
 }

@@ -16,13 +16,13 @@ const PaymentSelect = (props)=>{
                 <button type='button' id='change-size-button' onClick={()=>{
                     props.screens('size')
                 }}>
-                    {`U.S. Men's Size ${props.size.size}`} <i className="fas fa-pen"></i>   
+                    {`U.S. Men's Size ${props.sizeInfo.size}`} <i className="fas fa-pen"></i>   
                 </button>
             </div>
             <div className='container'>
                 <NewEntry 
                     screens={props.changeScreen} 
-                    size={props.size} 
+                    sizeInfo={props.sizeInfo} 
                     buy={props.buy}
                     cont={cont}
                     prev={prev}

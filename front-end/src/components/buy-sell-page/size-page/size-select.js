@@ -8,14 +8,15 @@ import SizeChart from './size-chart'
 const SizeSelect= (props)=>{
     // if buy we want lowest ask prices
     let buy = 'ask';
+    let lowestAsks='Lowest Asks'
     // else we want highest bid prices for sell
     if(!props.buy){
         buy='bid';
+        lowestAsks='Highest Bids'
     }
     const [sizeChart,setSizeChart]=useState(false)
     const [isLoading, setIsLoading] =useState(true)
     const [sizeData, setSizeData]=useState([])
-    let test = 'test';
     // switch between size chart and price display
     const displaySizes=()=>{
         setSizeChart(!sizeChart)
@@ -59,13 +60,13 @@ const SizeSelect= (props)=>{
                         <div>
                             <h2>Select Size</h2>
                             <div className="navbar navbar-expand-lg padding-none text-size-medium">
-                                <p align='left' className='mr-auto'>U.S. Men's Sizes|{`${test}`}</p>
+                                <p align='left' className='mr-auto'>U.S. Men's Sizes|{`${lowestAsks}`}</p>
                                 <p className='font-color-light-green hover-pointer' 
                                     onClick={displaySizes}>
                                     Size Chart
                                 </p>
                             </div>
-                            <SizeChart buy={props.buy} sizeData={sizeData} screens={props.screens} size={props.setSize}/>
+                            <SizeChart buy={props.buy} sizeData={sizeData} screens={props.screens} setSizeInfo={props.setSizeInfo}/>
                         </div>
                     }
                 </div>

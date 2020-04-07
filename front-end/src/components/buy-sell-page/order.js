@@ -1,15 +1,17 @@
 import React,{useState,useEffect} from 'react'
 import PaymentSelect from './create entry/payment-screen'
-import ShippingSelect from './create entry/shipping-select'
+import ShippingSelect from './shipping/shipping-select'
 import SizeSelect from './size-page/size-select'
+import Confirm from './confirm/confirm'
 
 // component for order for size chosen
 const Order=(props)=>{
     const [sizeSelectScreen, setSizeSelectScreen]=useState(true)
     const [paymentScreen,setPaymentScreen]=useState(false)
     const [shippingScreen, setShippingScreen]=useState(false)
+    const [confirmScreen,setConfirmScreen]=useState(false)
     const [loading,setLoading]=useState(false)
-    const [size,setSize] = useState([])
+    const [sizeInfo,setSizeInfo] = useState([])
     const [paymentInfo,setPaymentInfo]=useState({})
     const [shippingInfo,setShippingInfo]=useState([])
 
@@ -25,6 +27,7 @@ const Order=(props)=>{
                 setLoading(true)
                 setSizeSelectScreen(false)
                 setShippingScreen(false)
+                setConfirmScreen(false)
                 setPaymentScreen(true)
                 setLoading(false)
                 return
@@ -32,6 +35,7 @@ const Order=(props)=>{
                 setLoading(true)
                 setSizeSelectScreen(false)
                 setPaymentScreen(false)
+                setConfirmScreen(false)
                 setShippingScreen(true)
                 setLoading(false)
                 return
@@ -39,9 +43,17 @@ const Order=(props)=>{
                 setLoading(true)
                 setShippingScreen(false)
                 setPaymentScreen(false)
+                setConfirmScreen(false)
                 setSizeSelectScreen(true)
                 setLoading(false)
                 return
+            case 'confirm':
+                setLoading(true)
+                setShippingScreen(false)
+                setPaymentScreen(false)
+                setSizeSelectScreen(false)
+                setConfirmScreen(true)
+                setLoading(false)
             default:
                 return
         } 
@@ -52,13 +64,16 @@ const Order=(props)=>{
                 loading?<p>Loading...</p>:
                 <div>
                     {
-                        sizeSelectScreen?<SizeSelect buy={props.buy} name={props.name} sizeData={props} screens={changeScreen} setSize={setSize}/>:<div></div>
+                        sizeSelectScreen?<SizeSelect buy={props.buy} name={props.name} sizeData={props} screens={changeScreen} setSizeInfo={setSizeInfo}/>:<div></div>
                     }
                     {
-                        paymentScreen?<PaymentSelect setPaymentInfo={setPaymentInfo} buy={props.buy} screens={changeScreen} size={size}/>:<div></div>
+                        paymentScreen?<PaymentSelect setPaymentInfo={setPaymentInfo} buy={props.buy} screens={changeScreen} sizeInfo={sizeInfo}/>:<div></div>
                     }
                     {
                         shippingScreen?<ShippingSelect setShippingInfo={setShippingInfo} screens={changeScreen}/>:<div></div>
+                    }
+                    {
+                        confirmScreen?<Confirm sizeInfo={sizeInfo} paymentInfo={paymentInfo} shippingInfo={shippingInfo} screens={changeScreen} history={props.history} name={props.name} />:<div></div>
                     }
                 </div>
             }

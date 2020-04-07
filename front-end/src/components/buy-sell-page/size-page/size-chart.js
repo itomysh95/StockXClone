@@ -2,17 +2,17 @@ import React from 'react'
 
 // component for displaying all the current sizes/prices
 const SizeChart = (props)=>{
-    console.log(props)
     let color='light-green';
+    let bid='Ask'
     if(!props.buy){
         color = 'red'
+        bid='Bid'
     }
     let counter = -1;
     let holder = {}
     let temp=[]
     let i
     let sizePrices = props.sizeData;
-    console.log(sizePrices)
     let sizes = Object.keys(sizePrices)
     // to create 4 table cells per row
     const createTable=()=>{
@@ -50,15 +50,16 @@ const SizeChart = (props)=>{
                                             return(
                                                 <td>
                                                     <button type="button" className={`size-buy-${props.buy}-buttons`} onClick={()=>{   
-                                                        props.size({
+                                                        props.setSizeInfo({
                                                             size:size/10,
-                                                            price:sizePrices[size]
+                                                            price:sizePrices[size][0],
+                                                            id:sizePrices[size][1]
                                                         })
                                                         props.screens('payment')
                                                     }}>
                                                         <span>{`US${size/10}`}</span>
                                                         <br/>
-                                                        <span className={`font-color-${color}`}>{`${sizePrices[size]}`}</span>
+                                                        <span className={`font-color-${color}`}>{`${sizePrices[size][0]||`${bid}`}`}</span>
                                                     </button>
                                                 </td>
                                             )

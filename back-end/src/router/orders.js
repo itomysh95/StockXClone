@@ -1,0 +1,23 @@
+import express from 'express'
+const router = new express.Router()
+router.use(express.json())
+import {
+    createOrder
+} from '../tables/orders-table'
+
+
+
+router.post('/orders/submit/createOrder', async(req,res)=>{
+    try{
+        const success = await createOrder(req.body)
+        if(success.error){
+            throw success.error
+        }
+        res.status(200).send(success)
+    }catch(error){
+        res.status(400).send(error)
+    }
+})
+
+
+export {router as ordersRouter}

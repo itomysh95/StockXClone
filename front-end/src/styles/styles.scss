@@ -6,5 +6,7 @@
 @import './components/signup-form';
 @import './components/item-page/item-header';
 @import './components/item-page/item-buy-sell-options';
-@import './components//payment-display';
-@import './components/size-display';
+@import './components/buy-sell-page/payment-display';
+@import './components/buy-sell-page/size-display';
+@import './components/buy-sell-page/shipping-display';
+@import './components/buy-sell-page/confirm-display'

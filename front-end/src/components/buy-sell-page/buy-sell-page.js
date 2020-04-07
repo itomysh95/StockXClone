@@ -9,7 +9,7 @@ const BuySellPage=(props)=>{
     return(
         <div className='side-by-side'>
             <ItemImage name={props.match.params.name}/>
-            <Order name={props.match.params.name} buy={props.buy}/>
+            <Order name={props.match.params.name} buy={props.buy} history={props.history} />
         </div>
     )
 }

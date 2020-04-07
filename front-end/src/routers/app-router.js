@@ -7,6 +7,7 @@ import Header from '../components/header'
 import SignupPage from '../components/signup-page/signup-page';
 import ItemPage from '../components/item-page/item-page'
 import BuySellPage from '../components/buy-sell-page/buy-sell-page'
+import OrderSubmitted from '../components/buy-sell-page/order-submitted'
 
 const AppRouter = ()=>(
     <BrowserRouter>
@@ -19,7 +20,8 @@ const AppRouter = ()=>(
                 <Route path="/login" component = {SignupPage} />
                 <Route path={`/item/sneaker/:name`} exact={true} component={ItemPage} />
                 <Route path={`/item/buy/:name`} exact={true} render={(props)=><BuySellPage {...props} buy={true} />} />
-                <Route path={`/item/sell/:name`} exact={true} render={(props)=><BuySellPage {...props} buy={false} />}/>
+                <Route path={`/item/sell/:name`} exact={true} render={(props)=><BuySellPage {...props} buy={false} />} />
+                <Route path={`/order/submit/:order-id/:sneaker-name`} exact={true} render={(props)=> <OrderSubmitted {...props} />} />
                 <Route component={NotFoundPage} />
             </Switch>
         </div>

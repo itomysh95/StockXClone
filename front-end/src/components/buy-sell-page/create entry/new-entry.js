@@ -5,12 +5,15 @@ import BidNow from './bid-now'
 const NewEntry = (props)=>{
     const [buyNow,setBuyNow]=useState(true)
     // bid/ask/buy/sell amount
-
+    let shipping ='$--';
+    if(props.sizeInfo.price){
+        shipping=`$${(parseFloat(props.sizeInfo.price.slice(1))/10+10).toFixed(2)}`
+    }
 
     let details = {
         buy:'Buy Now',
         bid:'Bid',
-        shipping:`$${(parseFloat(props.size.price.slice(1))/10+10).toFixed(2)}`
+        shipping
     }
     if(!props.buy){
         details['buy']='Sell Now'
@@ -33,13 +36,13 @@ const NewEntry = (props)=>{
             {
                 buyNow?
                     <BuyNow details={details}
-                        size={props.size}
+                        sizeInfo={props.sizeInfo}
                         cont={props.cont}
                         screens={props.changeScreen}
                         prev={props.prev}
                     />
                     :
-                    <BidNow details={details} size={props.size} />
+                    <BidNow details={details} sizeInfo={props.sizeInfo} />
             }
         </div>
     )

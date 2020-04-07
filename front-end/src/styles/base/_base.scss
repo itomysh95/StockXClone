@@ -7,11 +7,6 @@ body {
     font-family: Helvetica, Arial, sans-serif;
 }
 
-h1{
-    font-size: $medium-size;
-    text-align: center;
-}
-
 .stand-out{
     color: white;
     background-color:black;
@@ -156,11 +151,6 @@ input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-}
-
-
-.width-80{
-    width:80%;
 }
 
 .position-relative{
