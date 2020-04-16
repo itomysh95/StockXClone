@@ -239,11 +239,12 @@ const ordersTableSetup = async()=>{
     // orders info
     try{
         await pool.query(
-            `CREATE TABLE IF NOT EXISTS o   rders(
+            `CREATE TABLE IF NOT EXISTS orders(
                 id                     SERIAL PRIMARY KEY,
                 "inventoryId"          SERIAL NOT NULL,
                 "buyerId"              SERIAL NOT NULL REFERENCES customer("id") ON DELETE CASCADE,
-                "sellerId"             SERIAL NOT NULL REFERENCES customer("id") ON DELETE CASCADE,
+                "sellerId"             SERIAL NOT NULL REFERENCES account("id") ON DELETE CASCADE,
+                "date"                 VARCHAR(64) NOT NULL,
                 FOREIGN KEY ("inventoryId") REFERENCES inventory("id") ON DELETE CASCADE
             );`
         )
@@ -329,12 +330,12 @@ const loadOrders = async()=>{
 }
 
 const start = async()=>{
-    // await tableSetup()
-    // await loadSneakers()
-    // await loadAccounts()
-    // await ordersTableSetup()
-    // await loadCustomers()
-    // await loadInventory()
+    await tableSetup()
+    await loadSneakers()
+    await loadAccounts()
+    await ordersTableSetup()
+    await loadCustomers()
+    await loadInventory()
     await loadOrders()
 }
 

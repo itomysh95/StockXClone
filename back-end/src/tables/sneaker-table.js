@@ -32,9 +32,10 @@ const sneakerParams = [
 
 
 // get a sneaker by name
-const getSneaker = async (sneakerName,filter={})=>{
+const getSneaker = async (sneakerName,client,filter={})=>{
     try{
-        const data = await pool.query(
+        let thread = client||pool
+        const data = await thread.query(
             `SELECT * FROM sneaker 
             WHERE LOWER(${sneakerParams[0]})=$1`,
             [sneakerName.toLowerCase()]
@@ -67,10 +68,11 @@ const getSneakers = async(brand)=>{
 }
 
 // update sneaker info
-const updateSneakerInfo=async(sneakerName,sneakerUpdates)=>{
+const updateSneakerInfo=async(sneakerName,sneakerUpdates,client)=>{
     try{
+        let thread = client || pool
         const updates = await updateQueryBuilder(sneakerUpdates)
-        const sneaker = await pool.query(
+        const sneaker = await thread.query(
             `UPDATE sneaker 
             SET ${updates} 
             WHERE LOWER(${sneakerParams[0]})=$1

@@ -53,6 +53,7 @@
     "sass-loader": "^6.0.7",
     "style-loader": "^0.18.2",
     "supertest": "^4.0.2",
+    "uniqid": "^5.2.0",
     "uuid": "^3.4.0",
     "validator": "^12.2.0"
   },

@@ -17,11 +17,12 @@ import {buildValues,toTitleCase} from '../database-stuff/database-queries'
 // );`
 
 // creates a new customer entry
-const createCustomer = async(customerDetails)=>{
+const createCustomer = async(customerDetails,client)=>{
     try{
+        let thread = client || pool
         const columns = Object.keys(customerDetails).map((columnName)=>`\"${columnName}\"`)
         const values = buildValues(Object.values(customerDetails))
-        const customer = await pool.query(
+        const customer = await thread.query(
             `
             INSERT INTO customer(${columns})
             VALUES(${values})

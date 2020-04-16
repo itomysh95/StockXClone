@@ -6,7 +6,7 @@ const ShippingSelect = (props)=>{
     const [addressOne,setAddressOne]=useState('')
     const [addressTwo,setAddressTwo]=useState('')
     const [city,setCity]=useState('')
-    const [phonenumber,setPhonenumber]=useState('')
+    const [phoneNumber,setPhoneNumber]=useState('')
     const [country,setCountry]=useState('')
     const [zipCode,setZipCode]=useState('')
     const [province,setProvince]=useState('')
@@ -15,7 +15,7 @@ const ShippingSelect = (props)=>{
         addressOne,
         addressTwo,
         city,
-        phonenumber,
+        phoneNumber,
         country,
         zipCode,
         province
@@ -82,13 +82,13 @@ const ShippingSelect = (props)=>{
                             }}
                         />
                         <input 
-                            id="shipping-phonenumber"
+                            id="shipping-phoneNumber"
                             type="text" 
                             placeholder="phonenumber" 
                             required
                             className="form-control"
                             onChange={(event)=>{
-                                setPhonenumber(event.target.value)
+                                setPhoneNumber(event.target.value)
                             }} 
                         />
                     </form> 

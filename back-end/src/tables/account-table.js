@@ -3,6 +3,7 @@ import {buildValues, updateQueryBuilder} from '../database-stuff/database-querie
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
 import {tokenForAccount} from '../middleware/auth'
+const uniqid = require('uniqid')
 
 // `CREATE TABLE IF NOT EXISTS ${tables[2]}(
 //     id                  SERIAL PRIMARY KEY,
@@ -43,14 +44,15 @@ const validateAndHash = async (reqBody)=>{
     }
 }
 // create a new account in database
-const createAccount = async(reqBody)=>{
+const createAccount = async(reqBody,client)=>{
     try{
+        let thread = client || pool
         const accountDetails = await validateAndHash(reqBody)
         // to format the query string
         const columns = await Object.keys(accountDetails).map(param=>`\"${param}\"`)
         const values = await buildValues(Object.values(accountDetails))
         // add to database
-        const account = await pool.query(
+        const account = await thread.query(
             `INSERT INTO account(${columns})
             VALUES(${values})
             RETURNING *`
@@ -61,6 +63,23 @@ const createAccount = async(reqBody)=>{
         const jwt = await tokenForAccount(account.rows[0])
         return {...account.rows, jwtToken:jwt}
     }catch(error){
+        console.log(error)
+        return {error}
+    }
+}
+
+// create a new guest account in database
+const createGuestAccount = async(client)=>{
+    try{
+        let unique = uniqid.time()
+        const guestAccount = await createAccount({
+            accountName:`GuestAccount`+unique,
+            password:`guestpassword`+unique,
+            email:`guestEmail${unique}@guest.com`,
+        },client)
+        return guestAccount['0']
+    }catch(error){
+        console.log(error)
         return {error}
     }
 }
@@ -200,5 +219,6 @@ export {
     deleteAccount,
     signinAccount,
     verifyAccount,
-    findAccountById
+    findAccountById,
+    createGuestAccount
 }

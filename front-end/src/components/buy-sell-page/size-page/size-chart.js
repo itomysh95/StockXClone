@@ -3,10 +3,10 @@ import React from 'react'
 // component for displaying all the current sizes/prices
 const SizeChart = (props)=>{
     let color='light-green';
-    let bid='Ask'
+    let bid='Bid'
     if(!props.buy){
         color = 'red'
-        bid='Bid'
+        bid='Sell'
     }
     let counter = -1;
     let holder = {}

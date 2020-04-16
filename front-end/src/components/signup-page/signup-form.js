@@ -13,7 +13,6 @@ const SignupForm = (props)=>{
     const [email, setEmail]= useState("")
     const [password, setPassword]= useState("")
     const [invalidSignUp,setInvalidSignUp] =useState(false)
-    let url = `${serverURL}/account`
     // when logging in or signing up
     const submission = async (event)=>{
         try{
@@ -32,6 +31,7 @@ const SignupForm = (props)=>{
                 },
                 referrerPolicy: 'no-referrer'
             }
+            let url = `${serverURL}/account`
             if(!isSignup){
                 url = `${serverURL}/account/login`
                 body={

@@ -90,7 +90,6 @@ router.get('/inventory/price/bid/all/:quantity',async(req,res)=>{
 router.get('/inventory/test/:sneakerName',async(req,res)=>{
     try{
         let details = await getDetails(req.params.sneakerName)
-        console.log(details)
         res.status(200).send(details)
     }catch(error){
         res.status(400).send(error)

@@ -11,6 +11,7 @@ const inventoryParam = [
     `\"price\"`,
     `\"size\"`,
     `\"male\"`,
+    `\"completed\"`
 ]
 
 // get the lowest ask or highest bid prices of a sneaker based on size
@@ -23,6 +24,7 @@ const getSizePrice= async(sneakerName,bid='')=>{
             FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${bid} ${inventoryParam[1]}
+            AND NOT ${inventoryParam[5]}
             ORDER BY ${inventoryParam[3]},${inventoryParam[2]} ASC
             `,[sneakerName.toLowerCase()]
         )
@@ -61,6 +63,7 @@ const getQuantity = async(sneakerName,type)=>{
             FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${buy}
+            AND NOT ${inventoryParam[5]}
             `,
             [sneakerName.toLowerCase()]
         )
@@ -74,6 +77,7 @@ const getQuantity = async(sneakerName,type)=>{
 const getPrices = async(sneakerName,amount,bid='')=>{
     try{
         let order = 'DESC'
+        // if not bid => it's a sale => highest bid prices
         if(bid==='NOT'){
             order = 'ASC'
         }
@@ -82,6 +86,7 @@ const getPrices = async(sneakerName,amount,bid='')=>{
             `SELECT ${inventoryParam[2]} FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${bid} ${inventoryParam[1]}
+            AND NOT ${inventoryParam[5]}
             ORDER BY ${inventoryParam[2]} ${order} 
             FETCH FIRST ${amount} ROWS ONLY
             `,
@@ -110,6 +115,7 @@ const getPricesAll = async(amount,bid='')=>{
             FROM (
                 SELECT * FROM inventory
                 WHERE ${bid} ${inventoryParam[1]}
+                AND NOT ${inventoryParam[5]}
                 ORDER BY ${inventoryParam[0]}, ${inventoryParam[2]} ${order}
             ) AS inventorySorted) AS maxValues
             ORDER BY ${inventoryParam[2]} ${order}
@@ -193,19 +199,27 @@ const getById = async(id)=>{
 
 //  find a quote by id and set the status to completed, return true if set,
 // else false
-const completeQuote = async(id)=>{
+const completeQuote = async(id,client)=>{
     try{
-        let quote = await pool.query(
+        let thread = client || pool
+        let quote = await thread.query(
+            `SELECT completed FROM inventory
+            WHERE id = $1
+            `,[id]
+        )
+        // if this quote is already completed
+        if(!quote.rows||quote.rows[0].completed){
+            return false
+        }
+        // else complete the quote
+        quote = await thread.query(
             `UPDATE inventory
             SET completed=true
             WHERE id = $1
             RETURNING *`,
             [id]
         )
-        if(quote.rows){
-            return true
-        }
-        return false
+        return quote.rows
     }catch(error){
         return {error}
     }
