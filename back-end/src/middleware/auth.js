@@ -33,7 +33,7 @@ const tokenForAccount = async (account)=>{
     // {algorithm} => defaults to hs256)
 
     // create a new token for given account
-    const token = await jwt.sign({_id:account.id.toString()},jwtConfig,{expiresIn:'1h'})
+    const token = await jwt.sign({_id:account.id.toString()},jwtConfig,{expiresIn:'2d'})
     return token
 }
 

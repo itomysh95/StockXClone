@@ -42,7 +42,12 @@ const NewEntry = (props)=>{
                         prev={props.prev}
                     />
                     :
-                    <BidNow details={details} sizeInfo={props.sizeInfo} />
+                    <BidNow details={details} 
+                        sizeInfo={props.sizeInfo}
+                        cont={props.cont}
+                        screens={props.changeScreen}
+                        prev={props.prev}
+                    />
             }
         </div>
     )

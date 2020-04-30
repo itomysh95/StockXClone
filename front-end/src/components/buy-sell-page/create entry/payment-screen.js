@@ -5,10 +5,15 @@ import NewEntry from './new-entry'
 const PaymentSelect = (props)=>{
     const cont=(paymentDetails)=>{
         props.setPaymentInfo(paymentDetails)
-        props.screens('shipping')
+        if(props.isBuy){
+            props.screens('shipping')
+        }else{
+            // if it's a seller then they don't need to input their shipping address
+            props.screens('confirm')
+        }
     }
-    const prev=()=>{
-        props.screens('size')
+    const prev=(screen)=>{
+        props.screens(screen||'size')
     }
     return(
         <div>
@@ -21,7 +26,7 @@ const PaymentSelect = (props)=>{
             </div>
             <div className='container'>
                 <NewEntry 
-                    screens={props.changeScreen} 
+                    screens={props.screens} 
                     sizeInfo={props.sizeInfo} 
                     buy={props.buy}
                     cont={cont}

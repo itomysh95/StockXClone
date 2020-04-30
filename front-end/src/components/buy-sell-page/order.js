@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import PaymentSelect from './create entry/payment-screen'
 import ShippingSelect from './shipping/shipping-select'
 import SizeSelect from './size-page/size-select'
-import Confirm from './confirm/confirm'
+import ConfirmOrder from './confirm/confirm-order'
 
 // component for order for size chosen
 const Order=(props)=>{
@@ -14,6 +14,7 @@ const Order=(props)=>{
     const [sizeInfo,setSizeInfo] = useState([])
     const [paymentInfo,setPaymentInfo]=useState({})
     const [shippingInfo,setShippingInfo]=useState([])
+    const [isBuy,setIsBuy]=useState(props.buy)
 
     useEffect(()=>{
         setLoading(true)
@@ -67,13 +68,13 @@ const Order=(props)=>{
                         sizeSelectScreen?<SizeSelect buy={props.buy} name={props.name} sizeData={props} screens={changeScreen} setSizeInfo={setSizeInfo}/>:<div></div>
                     }
                     {
-                        paymentScreen?<PaymentSelect setPaymentInfo={setPaymentInfo} buy={props.buy} screens={changeScreen} sizeInfo={sizeInfo}/>:<div></div>
+                        paymentScreen?<PaymentSelect setPaymentInfo={setPaymentInfo} buy={props.buy} screens={changeScreen} sizeInfo={sizeInfo}  isBuy={isBuy} />:<div></div>
                     }
                     {
                         shippingScreen?<ShippingSelect setShippingInfo={setShippingInfo} screens={changeScreen}/>:<div></div>
                     }
                     {
-                        confirmScreen?<Confirm sizeInfo={sizeInfo} paymentInfo={paymentInfo} shippingInfo={shippingInfo} screens={changeScreen} history={props.history} name={props.name} />:<div></div>
+                        confirmScreen?<ConfirmOrder sizeInfo={sizeInfo} paymentInfo={paymentInfo} shippingInfo={shippingInfo} screens={changeScreen} history={props.history} name={props.name} isBuy={isBuy} />:<div></div>
                     }
                 </div>
             }

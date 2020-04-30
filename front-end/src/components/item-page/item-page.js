@@ -34,9 +34,9 @@ const ItemPage = (props)=>{
                     <ItemBuySellOptions sneakerName={item.sneakerName} />
                     <ItemPicture item={item} />
                     <ItemInfo item={item} />
-                    <ItemStats item={item} />
+                    <ItemStats item={props.match.params.name} />
                     <RelatedItem item={item} />
-                    <ItemSalesHistory item={item}/>
+                    <ItemSalesHistory item={props.match.params.name}/>
                     <PageEnd />
                 </div>
             }

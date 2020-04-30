@@ -1,15 +1,14 @@
 import React, {useState} from 'react'
-import {Redirect} from 'react-router-dom'
-import OrderSubmitted from '../order-submitted'
-import { withRouter     } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import {serverURL} from '../../../../config/config'
 import {connect} from 'react-redux'
 import LoginPrompt from '../../signup-page/login-prompt'
 
-const Confirm=(props)=>{
+const ConfirmOrder=(props)=>{
+    let history = useHistory();
     const [isLoading,setIsLoading]=useState(false)
     const [loginPrompt,setLoginPrompt]=useState(false)
-    CONST [orderId,setOrderId]=useState([])
+    const [orderInfo,setOrderInfo]=useState([])
     const paymentDetails = {
         "Full Name":props.paymentInfo.fullName,
         "Card Number":props.paymentInfo.cardNum,
@@ -36,7 +35,6 @@ const Confirm=(props)=>{
     const submit = async ()=>{
         try{
             let token = sessionStorage.getItem('jwt')||''
-            // todo post order into orders database
             let body={
                 paymentInfo:props.paymentInfo,
                 shippingInfo:props.shippingInfo,
@@ -68,11 +66,14 @@ const Confirm=(props)=>{
             // if shopping as a guest
             const res = await fetch(`${serverURL}/orders/submit/createOrder${guest}`,fetchDetails)
             let response = await res.json()
+            setOrderInfo(response)
             if(res.status===200){
-                setOrderId = [response.orderId]
-                return true
+                return history.push(`/order/submited`,{
+                    orderInfo,
+                    sneakerName:props.name
+                })
             }else{
-                return false
+                return alert('Sorry, your order could not be submitted currently, please check your details')
             }
         }catch(error){
             console.log(error)
@@ -128,23 +129,15 @@ const Confirm=(props)=>{
                             props.screens('shipping')
                         }}>
                         </input>
-                        <input type="button" className="btn btn-success" value='Confirm Order' id='next-order-details' onClick={async ()=>{
-                            setIsLoading(true)
-                            // TODO
-                            // if(!props.loggedIn){
-                            //     setLoginPrompt(true)
-                            // }
-                            let res = await submit()
-                            if(res){
-                                setIsLoading(false)
-                                history.pushState({
-
-                                },null,`/order/submit/${orderNumber}/${sneakerName}`)
-                            }else{
-                                setIsLoading(false)
-                                alert('Sorry, your order could not be submitted currently, please check your details')
+                        <input 
+                            type="button" 
+                            className="btn btn-success" 
+                            value='Confirm Order' 
+                            id='next-order-details' 
+                            onClick={async ()=>{
+                                await submit()}
                             }
-                        }}>
+                        >
                         </input>
                     </div>
                 </div>
@@ -161,4 +154,4 @@ const mapStateToProps = (state)=>{
     }
 }
 // call to connect that pulls it all together
-export default connect(mapStateToProps)(Confirm);
+export default connect(mapStateToProps)(ConfirmOrder);

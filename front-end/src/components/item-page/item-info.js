@@ -1,18 +1,16 @@
 import React from 'react'
+import moment from 'moment'
 
 const ItemInfo=(props)=>{
-    // TODO UPDATE DATABASE TO GET MORE DETAILS FOR THIS PAGE
     return(
         <div className='container side-by-side text-size-medium font-family-sans-serif'>
             <div className='container'>
-                <p>STYLE</p>
-                <p>COLORWAY</p>
-                <p>RETAIL PRICE</p>
-                <p>RELEASE DATE</p>
+                <p>COLORWAY {`${props.item.colorWay}`} </p>
+                <p>RETAIL PRICE {`${props.item.retailPrice}`} </p>
+                <p>RELEASE DATE {`${moment(props.item.releaseDate).format("YYYY/MM/DD")}`} </p>
             </div>
             <div className='container' align='left'>
-                <p>{`${props.item.sneakerInfo}`}</p>
-                <p>Insert Shoe Details here</p>
+                <p>(INSERT SHOE DETAILS HERE){`${props.item.sneakerInfo}`}</p>
             </div>
         </div>
     )

@@ -40,7 +40,9 @@ const tableSetup = async ()=>{
             "sneakerInfo"   TEXT,
             "brandName"     VARCHAR(64) NOT NULL,
             "retailPrice"   MONEY,
-            "male"          BOOLEAN NOT NULL
+            "releaseDate"   DATE,
+            "male"          BOOLEAN NOT NULL,
+            "colorWay"      TEXT NOT NULL
             );`
         ) 
         console.log(`sneaker table created succesfuly`)
@@ -73,6 +75,8 @@ const tableSetup = async ()=>{
                 "male"              BOOLEAN NOT NULL,
                 "customerId"        SERIAL NOT NULL REFERENCES customer("id") ON DELETE CASCADE,
                 "completed"         BOOLEAN NOT NULL DEFAULT FALSE,
+                "dateCompleted"     DATE,
+                "dateCreated"       DATE NOT NULL,
                 FOREIGN KEY     ("sneakerName") REFERENCES sneaker("sneakerName") ON DELETE CASCADE    
             );`
         )
@@ -87,24 +91,20 @@ const loadSneakers= async ()=>{
     try{
         let i;
         for(i=0;i<30;i++){
-            let num = faker.random.number(brands.length)
-            let brandName = brands[num]
+            let num = faker.random.number(brands.length-1)
             let color = faker.commerce.color()
             let shoeNum = faker.random.number(12)
             let word = faker.random.word()
-            let retailPrice = faker.random.number(175)
-            let male = (faker.random.number(10)%2===0)
-    
-            let sneakerName = color+" "+brandName+" "+shoeNum+" "+word
-            let amountSold = faker.random.number(20)
-            let sneakerInfo = faker.lorem.sentence(9)
+            let brandName=brands[num]
             const sneaker = {
-                sneakerName,
-                amountSold,
-                sneakerInfo,
+                sneakerName:color+" "+brandName+" "+shoeNum+" "+word,
+                amountSold:faker.random.number(20),
+                sneakerInfo:faker.lorem.sentence(9),
                 brandName,
-                retailPrice,
-                male
+                retailPrice:faker.random.number(175),
+                male:(faker.random.number(10)%2===0),
+                releaseDate:faker.date.past(20),
+                colorWay: color
             }
             await createSneaker(sneaker)
         }
@@ -147,13 +147,19 @@ const loadAccounts = async()=>{
 
 
 // to load some bid entries into inventory table, if bid=false => ask entries
-const loadInventory = async(bid=true)=>{
+const loadInventory = async()=>{
     try{
         const getTestCustomers = await pool.query(
             `
                 SELECT id FROM customer;
             `
         )
+        // add an amount of days to a given date
+        const addDays = (date, days)=>{
+            let result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
         const testCustomers = getTestCustomers.rows
         const len = testCustomers.length-1
         let i;
@@ -165,6 +171,12 @@ const loadInventory = async(bid=true)=>{
         let largest = 17.5;
         let midSize;
         let numOfBids;
+        let bid;
+        let bids=[true,false];
+        let completedBid;
+        let dateCompleted;
+        let dateCreated;
+        let k;
         // for each of the brands
         for(i=0;i<brands.length;i++){
             // get all the sneakers of the brand
@@ -172,7 +184,7 @@ const loadInventory = async(bid=true)=>{
             // for each sneaker of the brand
             brand.data.map(async (sneaker)=>{
                 // random number of bids to create for each sneaker
-                numOfBids = faker.random.number(10)
+                numOfBids = faker.random.number(20)
                 // for each bid
                 for(j=0;j<numOfBids;j++){
                     // if female shoe change to female shoe sizes
@@ -180,8 +192,17 @@ const loadInventory = async(bid=true)=>{
                         smallest = 4.5;
                         largest = 17;
                     }
+                    dateCreated=faker.date.past(2);
+                    // to randomly load a completed or incomplete bid
+                    k = faker.random.number(10)
+                    if(k>8){
+                        dateCompleted=addDays(dateCreated,faker.random.number(22))
+                    }else{
+                        dateCompleted=null;
+                    }
                     // randomly add 0.5 
                     midSize = (faker.random.number(1)/0.5)
+                    bid = (bids[faker.random.number(1)])
                     // entry details to create a new entry
                     entryDetails = {
                         sneakerName:sneaker.sneakerName,
@@ -189,7 +210,10 @@ const loadInventory = async(bid=true)=>{
                         price:(faker.random.number(500)+100),
                         size:(faker.random.number(largest-smallest)+smallest+midSize),
                         male:sneaker.male,
-                        customerId:testCustomers[faker.random.number(len)].id
+                        customerId:testCustomers[faker.random.number(len)].id,
+                        completed:k>8,
+                        dateCreated,
+                        dateCompleted
                     }
                     await newEntry(entryDetails)
                 }
@@ -244,7 +268,7 @@ const ordersTableSetup = async()=>{
                 "inventoryId"          SERIAL NOT NULL,
                 "buyerId"              SERIAL NOT NULL REFERENCES customer("id") ON DELETE CASCADE,
                 "sellerId"             SERIAL NOT NULL REFERENCES account("id") ON DELETE CASCADE,
-                "date"                 VARCHAR(64) NOT NULL,
+                "date"                 DATE NOT NULL DEFAULT CURRENT_DATE,
                 FOREIGN KEY ("inventoryId") REFERENCES inventory("id") ON DELETE CASCADE
             );`
         )

@@ -24,7 +24,8 @@ const sneakerParams = [
     `\"sneakerInfo\"`,
     `\"brandName\"`,
     `\"retailPrice\"`,
-    `\"male\"`
+    `\"male\"`,
+    `\"releaseDate\"`
 ]
 
 // TODO figure out best way to throw errors for error handling...
@@ -113,7 +114,7 @@ const createSneaker = async (sneaker)=>{
         // return the sneaker that was added
         return {data:data.rows[0]}
     }catch(error){
-        return {error}
+        console.log(error)
     }
 }
 
@@ -180,18 +181,6 @@ const getPopularBrands = async(amount)=>{
     }
 }
 
-// get retail price of a sneaker
-const getRetailPrice = async(sneakerName)=>{
-    try{
-        const retailPrice = await pool.query(
-            `SELECT ${sneakerParams[4]} FROM sneaker
-            WHERE LOWER ${sneakerParams[0]}=$1`
-        ,[sneakerName.toLowerCase()])
-        return{price:retailPrice.rows}
-    }catch(error){
-        console.log(error)
-    }
-}
 
 export{
     getSneaker,
@@ -200,6 +189,5 @@ export{
     deleteSneaker,
     getPopular,
     createSneaker,
-    getPopularBrands,
-    getRetailPrice
+    getPopularBrands
 }

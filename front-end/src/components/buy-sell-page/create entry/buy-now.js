@@ -132,15 +132,11 @@ const BuyNow=(props)=>{
                         setCardNum(event.target.value)
                     }}
                 />
-                <input type="number" 
-                    placeholder="Expiration MM/YY" 
-                    id="payment-expiry-date"
-                    required
-                    className="form-control"
-                    onChange={(event)=>{
-                        setExpiry(event.target.value)
-                    }}
-                />
+                <span className="expiration">
+                    <input type="text" name="month" placeholder="MM" maxLength="2" size="2" />
+                    <span>/</span>
+                    <input type="text" name="year" placeholder="YY" maxLength="2" size="2" />
+                </span>
                 <input 
                     type="number" 
                     placeholder="cvv" 

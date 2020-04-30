@@ -41,16 +41,17 @@ const createOrder = async (orderDetails,account=null)=>{
         }
 
         // console.log('account is',account)
-        let customer = await createCustomer({
+        await createCustomer({
             ...orderDetails.shippingInfo,
             accountId:account.id
         },client)
-        // set the quote status to completedm
+        // set the quote status to completed
         quote = await completeQuote(orderDetails.id,client)
         // if something went wrong with completeing the quote
         if(!quote){
             throw {error: 'could not complete the quote at this time'}
         }
+        console.log(quote)
         // create the order in order database
         let buyerId = account.id
         let sellerId = quote[0].customerId
@@ -62,7 +63,7 @@ const createOrder = async (orderDetails,account=null)=>{
             buyerId,
             sellerId,
             inventoryId:quote[0].id,
-            date:Date(Date.now()).toString()
+            date:quote[0].dateCompleted
         }
         const orderEntry = await newOrderEntry(order,client)
         // ---------------------------------------------------------
@@ -79,9 +80,7 @@ const createOrder = async (orderDetails,account=null)=>{
         },client)
         // update number of 
         await client.query('COMMIT')
-        return{
-            sucess:'Order created successfully'
-        }
+        return orderEntry
     }catch(error){
         await client.query('ROLLBACK')
     }finally{

@@ -7,7 +7,8 @@ import {
     getPricesAll,
     newEntry,
     getDetails,
-    getSizePrice
+    getSizePrice,
+    getStats
 } from '../tables/inventory-table'
 // router file to handle inventory API calls
 
@@ -115,5 +116,16 @@ router.get('/inventory/retrieve/bid/size/:sneakerName',async(req,res)=>{
         res.status(400).send(error)
     }
 })
+
+// get sneaker statistics
+router.get('/inventory/retrieve/stats/:sneakerName', async (req,res)=>{
+    try{
+        const stats = await getStats(req.params.sneakerName)
+        res.status(200).send(stats)
+    }catch(error){
+        res.status(400).send(error)
+    }
+})
+
 
 export {router as inventoryRouter}

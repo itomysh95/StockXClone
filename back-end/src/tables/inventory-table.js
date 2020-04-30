@@ -212,16 +212,42 @@ const completeQuote = async(id,client)=>{
             return false
         }
         // else complete the quote
+        let dateCompleted = new Date()
         quote = await thread.query(
             `UPDATE inventory
-            SET completed=true
-            WHERE id = $1
+            SET completed=$1,
+            \"dateCompleted\"=$2
+            WHERE id = $3
             RETURNING *`,
-            [id]
+            [true,dateCompleted,id]
         )
         return quote.rows
     }catch(error){
         return {error}
+    }
+}
+
+
+// get stats of a sneaker
+const getStats = async(sneakerName)=>{
+    try{
+        const stats = await pool.query(
+            `SELECT  
+            MAX(${inventoryParam[2]}) as highest_sale,
+            MIN(${inventoryParam[2]}) as lowest_sale
+            FROM (
+                SELECT * FROM inventory
+                WHERE LOWER(${inventoryParam[0]})=$1
+                AND \"dateCompleted\" > (current_date - interval '364 day')
+                ) AS filtered_inventory
+            `
+        ,[
+            sneakerName.toLowerCase()
+        ])
+        console.log(stats.rows)
+        return stats.rows
+    }catch(error){
+        console.log(error)
     }
 }
 
@@ -234,4 +260,5 @@ export {
     getSizePrice,
     getById,
     completeQuote,
+    getStats,
 }

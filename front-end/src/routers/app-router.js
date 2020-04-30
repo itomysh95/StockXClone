@@ -21,7 +21,7 @@ const AppRouter = ()=>(
                 <Route path={`/item/sneaker/:name`} exact={true} component={ItemPage} />
                 <Route path={`/item/buy/:name`} exact={true} render={(props)=><BuySellPage {...props} buy={true} />} />
                 <Route path={`/item/sell/:name`} exact={true} render={(props)=><BuySellPage {...props} buy={false} />} />
-                <Route path={`/order/submit/:order-id/:sneaker-name`} exact={true} render={(props)=> <OrderSubmitted {...props} />} />
+                <Route path={`/order/submited`} exact={true} render={(props)=> <OrderSubmitted {...props} />} />
                 <Route component={NotFoundPage} />
             </Switch>
         </div>

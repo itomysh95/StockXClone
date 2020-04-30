@@ -5,8 +5,7 @@ import {
     updateSneakerInfo, 
     deleteSneaker,
     getPopular,
-    getPopularBrands,
-    getRetailPrice
+    getPopularBrands
 } from '../tables/sneaker-table'
 const router = new express.Router()
 router.use(express.json())
@@ -97,14 +96,6 @@ router.get('/sneaker/retrieve/popularbrands/:amount', async (req,res)=>{
     }
 })
 
-// get retail price of a sneaker
-router.get('/sneaker/retrieve/retailPrice/:sneakerName', async (req,res)=>{
-    try{
-        const retailPrice = await getRetailPrice(req.params.sneakerName)
-        res.status(200).send(retailPrice)
-    }catch(error){
-        res.status(400).send(error)
-    }
-})
+
 
 export{router as sneakerRouter}
