@@ -1,5 +1,13 @@
 import express from 'express'
-import {createAccount, updateAccount, getAccount, deleteAccount, signinAccount, verifyAccount, findAccountById} from '../tables/account-table'
+import {
+    createAccount, 
+    updateAccount, 
+    getAccount, 
+    deleteAccount, 
+    signinAccount, 
+    verifyAccount, 
+    findAccountById
+} from '../tables/account-table'
 import {tokenForAccount, auth} from '../middleware/auth'
 const router = new express.Router()
 router.use(express.json())
@@ -14,6 +22,7 @@ router.post('/account',async (req,res)=>{
             throw account.error
         }
         res.status(201).send(account)
+        
     }catch(error){
         res.status(400).send(error)
     }

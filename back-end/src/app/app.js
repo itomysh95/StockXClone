@@ -22,6 +22,7 @@ import {sneakerRouter} from '../router/sneaker'
 import {accountRouter} from '../router/account'
 import {inventoryRouter} from '../router/inventory'
 import {ordersRouter} from '../router/orders'
+import {accountTypesRouter} from '../router/account-types'
 
 
 const app = express()
@@ -35,6 +36,7 @@ app.use(sneakerRouter)
 app.use(accountRouter)
 app.use(inventoryRouter)
 app.use(ordersRouter)
+app.use(accountTypesRouter)
 app.use(express.json())
 
 app.listen(port,()=>{

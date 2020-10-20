@@ -13,7 +13,7 @@ const ItemInfo=(props)=>{
                 <p>(INSERT SHOE DETAILS HERE){`${props.item.sneakerInfo}`}</p>
             </div>
         </div>
-    )
+    )   
 }
 
 export default ItemInfo 

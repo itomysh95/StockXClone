@@ -11,7 +11,7 @@ const inventoryParam = [
     `\"price\"`,
     `\"size\"`,
     `\"male\"`,
-    `\"completed\"`
+    `\"status\"`
 ]
 
 // get the lowest ask or highest bid prices of a sneaker based on size
@@ -24,9 +24,9 @@ const getSizePrice= async(sneakerName,bid='')=>{
             FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${bid} ${inventoryParam[1]}
-            AND NOT ${inventoryParam[5]}
+            AND ${inventoryParam[5]}=$2
             ORDER BY ${inventoryParam[3]},${inventoryParam[2]} ASC
-            `,[sneakerName.toLowerCase()]
+            `,[sneakerName.toLowerCase(),'open']
         )
         let sizePrices={}
         prices.rows.map(priceSizePair=>{
@@ -63,9 +63,9 @@ const getQuantity = async(sneakerName,type)=>{
             FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${buy}
-            AND NOT ${inventoryParam[5]}
+            AND ${inventoryParam[5]}=$2
             `,
-            [sneakerName.toLowerCase()]
+            [sneakerName.toLowerCase(),'open']
         )
         return count.rows[0].count
     }catch(error){
@@ -86,11 +86,11 @@ const getPrices = async(sneakerName,amount,bid='')=>{
             `SELECT ${inventoryParam[2]} FROM inventory
             WHERE LOWER(${inventoryParam[0]})=$1
             AND ${bid} ${inventoryParam[1]}
-            AND NOT ${inventoryParam[5]}
+            AND ${inventoryParam[5]}=$2
             ORDER BY ${inventoryParam[2]} ${order} 
             FETCH FIRST ${amount} ROWS ONLY
             `,
-            [sneakerName.toLowerCase()]
+            [sneakerName.toLowerCase(),'open']
         )
         return prices.rows
     }catch(error){
@@ -115,11 +115,11 @@ const getPricesAll = async(amount,bid='')=>{
             FROM (
                 SELECT * FROM inventory
                 WHERE ${bid} ${inventoryParam[1]}
-                AND NOT ${inventoryParam[5]}
+                AND ${inventoryParam[5]}=$1
                 ORDER BY ${inventoryParam[0]}, ${inventoryParam[2]} ${order}
             ) AS inventorySorted) AS maxValues
             ORDER BY ${inventoryParam[2]} ${order}
-            FETCH FIRST ${amount} ROWS ONLY`
+            FETCH FIRST ${amount} ROWS ONLY`,['open']
         )
         return prices.rows
     }catch(error){
@@ -197,29 +197,27 @@ const getById = async(id)=>{
     }
 }
 
-//  find a quote by id and set the status to completed, return true if set,
+// find a quote by id and set the status to completed, return true if set,
 // else false
 const completeQuote = async(id,client)=>{
     try{
         let thread = client || pool
         let quote = await thread.query(
-            `SELECT completed FROM inventory
+            `SELECT status FROM inventory
             WHERE id = $1
             `,[id]
         )
         // if this quote is already completed
-        if(!quote.rows||quote.rows[0].completed){
+        if(!quote.rows||!quote.rows[0].status==='open'){
             return false
         }
-        // else complete the quote
-        let dateCompleted = new Date()
+
         quote = await thread.query(
             `UPDATE inventory
-            SET completed=$1,
-            \"dateCompleted\"=$2
-            WHERE id = $3
+            SET \"status\" = $1
+            WHERE id = $2
             RETURNING *`,
-            [true,dateCompleted,id]
+            ['processing',id]
         )
         return quote.rows
     }catch(error){

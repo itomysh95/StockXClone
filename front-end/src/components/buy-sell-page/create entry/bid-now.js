@@ -3,7 +3,7 @@ import React,{useState,useEffect} from 'react'
 
 const BidNow =(props)=>{
     let totalCost= '--'
-    let [expirationDate,setExpirationDate]=usueState('')
+    let [expirationDate,setExpirationDate]=useState('')
     let [cvv,setCvv]=useState('')
     let [fullName,setFullName]=useState('')
     let [cardNum,setCardNum]=useState('')
@@ -56,10 +56,10 @@ const BidNow =(props)=>{
                         form-control-lg
                         text-size-medium
                         font-family-sans-serif"
-                        defaultValue={`Enter ${props.details.bid}`}
+                        defaultValue={`Enter a bid`}
                     />
                 </div>
-                <span className=''>{`A good bid would be around ${props.details.goodBid||'...'}`}</span>
+                <span className=''>{`A good bid would be around ${props.goodBid||'...'}`}</span>
                 <div className='left-space-right'>  
                     <p>
                         Discount Code

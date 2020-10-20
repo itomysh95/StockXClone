@@ -12,6 +12,11 @@ const accountReducer = (state=accountReducerDefaultState,action)=>{
                 ...state,
                 loggedIn: false
             }
+        case 'SET_ACCOUNT_RATES':
+            return{
+                ...state,
+                accountRates:action.accountRates
+            }
         default:
             return state;
     }

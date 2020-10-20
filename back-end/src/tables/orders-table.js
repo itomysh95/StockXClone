@@ -39,8 +39,6 @@ const createOrder = async (orderDetails,account=null)=>{
         if(!account){
             account = await createGuestAccount(client)
         }
-
-        // console.log('account is',account)
         await createCustomer({
             ...orderDetails.shippingInfo,
             accountId:account.id
@@ -51,7 +49,6 @@ const createOrder = async (orderDetails,account=null)=>{
         if(!quote){
             throw {error: 'could not complete the quote at this time'}
         }
-        console.log(quote)
         // create the order in order database
         let buyerId = account.id
         let sellerId = quote[0].customerId
@@ -63,7 +60,6 @@ const createOrder = async (orderDetails,account=null)=>{
             buyerId,
             sellerId,
             inventoryId:quote[0].id,
-            date:quote[0].dateCompleted
         }
         const orderEntry = await newOrderEntry(order,client)
         // ---------------------------------------------------------

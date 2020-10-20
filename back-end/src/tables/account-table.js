@@ -20,11 +20,8 @@ const accountParams = [
     `\"email\"`,
     `\"sneakersSold\"`,
     `\"sneakersBought\"`,
-    `id`]
-
-
-
-
+    `id`
+]
 
 // TODO validation function?
 // validate and clean user input for creating a new account

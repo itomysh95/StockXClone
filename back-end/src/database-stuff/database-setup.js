@@ -3,8 +3,13 @@ import {createSneaker, getSneakers} from '../tables/sneaker-table'
 import {pool} from './database-pool'
 import {dropTable} from './database-queries'
 import { newEntry } from '../tables/inventory-table'
-import { createAccount, findAccountById } from '../tables/account-table'
+import { createAccount } from '../tables/account-table'
 import { createCustomer } from '../tables/customer-table'
+import { createAccountType } from '../tables/account-type-table'
+
+
+
+
 
 var faker = require('faker')
 
@@ -21,6 +26,7 @@ const tables=[
     'sneaker',
     'account',
     'inventory',
+    'accountTypes'
 ]
 
 // drop sneaker/account/inventory tables and recreate them
@@ -51,13 +57,31 @@ const tableSetup = async ()=>{
     }
     try{
         await pool.query(
+            `CREATE TABLE IF NOT EXISTS accountTypes(
+                id                          SERIAL PRIMARY KEY,
+                "accountType"               VARCHAR(64) UNIQUE NOT NULL,
+                "shippingRates"             INTEGER NOT NULL,
+                "processingRates"           INTEGER NOT NULL,
+                "annualFee"                 MONEY NOT NULL,
+                "monthlyTransactionLimit"   INTEGER NOT NULL,
+                "level"                     INTEGER NOT NULL
+            );`
+        )
+        console.log(`accountTypes table created successfuly`)
+    }catch(error){
+        return console.log('error creating accountTypes: ',error)
+    }
+    try{
+        await pool.query(
             `CREATE TABLE IF NOT EXISTS account(
             id                  SERIAL PRIMARY KEY,
             "accountName"       VARCHAR(64) UNIQUE NOT NULL,
             "password"          VARCHAR(64) NOT NULL,
             "email"             VARCHAR(255) UNIQUE NOT NULL,
             "sneakersSold"      INTEGER,
-            "sneakersBought"    INTEGER
+            "sneakersBought"    INTEGER,
+            "accountType"       VARCHAR(64) NOT NULL DEFAULT 'standard' REFERENCES accountTypes("accountType") ON DELETE CASCADE,
+            "transactionsLeft"  INTEGER DEFAULT 250 NOT NULL 
             );`
         )
         console.log(`account table created succesfuly`)
@@ -74,7 +98,7 @@ const tableSetup = async ()=>{
                 "size"              NUMERIC(3,1) NOT NULL,
                 "male"              BOOLEAN NOT NULL,
                 "customerId"        SERIAL NOT NULL REFERENCES customer("id") ON DELETE CASCADE,
-                "completed"         BOOLEAN NOT NULL DEFAULT FALSE,
+                "status"            VARCHAR(64) NOT NULL DEFAULT 'open',
                 "dateCompleted"     DATE,
                 "dateCreated"       DATE NOT NULL,
                 FOREIGN KEY     ("sneakerName") REFERENCES sneaker("sneakerName") ON DELETE CASCADE    
@@ -114,6 +138,50 @@ const loadSneakers= async ()=>{
     }
 }
 
+
+const loadAccountTypes = async()=>{
+    try{
+        let standardAccount = {
+            accountType:'standard',
+            shippingRates:15,
+            processingRates:5,
+            annualFee:0,
+            monthlyTransactionLimit:500,
+            level:0,
+        }
+        let staffAccount = {
+            accountType:'staff',
+            shippingRates:5,
+            processingRates:1,
+            annualFee:0,
+            monthlyTransactionLimit:9999,
+            level:2,
+        }
+        let adminAccount = {
+            accountType:'admin',
+            shippingRates:5,
+            processingRates:1,
+            annualFee:0,
+            monthlyTransactionLimit:9999,
+            level:3,
+        }
+        let premiumAccount = {
+            accountType:'premium',
+            shippingRates:10,
+            processingRates:3,
+            annualFee:30,
+            monthlyTransactionLimit:1000,
+            level:1,
+        }
+        standardAccount = await createAccountType(standardAccount)
+        staffAccount = await createAccountType(staffAccount)
+        adminAccount = await createAccountType(adminAccount)
+        premiumAccount = await createAccountType(premiumAccount)
+    }catch(error){
+        console.log('error loading accountType table:',error)
+    }
+}
+
 // create testing accounts in database
 const loadAccounts = async()=>{
     try{
@@ -133,7 +201,8 @@ const loadAccounts = async()=>{
                 password:'password123',
                 email:faker.internet.email(),
                 sneakersSold,
-                sneakersBought
+                sneakersBought,
+                accountType:'standard'
 
             }
             await createAccount(accountDetails)
@@ -173,7 +242,6 @@ const loadInventory = async()=>{
         let numOfBids;
         let bid;
         let bids=[true,false];
-        let completedBid;
         let dateCompleted;
         let dateCreated;
         let k;
@@ -211,7 +279,7 @@ const loadInventory = async()=>{
                         size:(faker.random.number(largest-smallest)+smallest+midSize),
                         male:sneaker.male,
                         customerId:testCustomers[faker.random.number(len)].id,
-                        completed:k>8,
+                        status:(k>8?'completed':'open'),
                         dateCreated,
                         dateCompleted
                     }
@@ -268,7 +336,9 @@ const ordersTableSetup = async()=>{
                 "inventoryId"          SERIAL NOT NULL,
                 "buyerId"              SERIAL NOT NULL REFERENCES customer("id") ON DELETE CASCADE,
                 "sellerId"             SERIAL NOT NULL REFERENCES account("id") ON DELETE CASCADE,
-                "date"                 DATE NOT NULL DEFAULT CURRENT_DATE,
+                "dateCreated"          DATE NOT NULL DEFAULT CURRENT_DATE,
+                "dateCompleted"        DATE,
+                "status"               VARCHAR(64) NOT NULL DEFAULT 'open',
                 FOREIGN KEY ("inventoryId") REFERENCES inventory("id") ON DELETE CASCADE
             );`
         )
@@ -356,6 +426,7 @@ const loadOrders = async()=>{
 const start = async()=>{
     await tableSetup()
     await loadSneakers()
+    await loadAccountTypes()
     await loadAccounts()
     await ordersTableSetup()
     await loadCustomers()
